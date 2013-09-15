@@ -1,0 +1,94 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{3F448A7F-7103-4726-8CBA-22259EEBB357}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>QUT.Bio.BioPatML</RootNamespace>
+    <AssemblyName>QUT.Bio.BioPatML</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Bio">
+      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\.NET Bio\1.1\Tools\Bin\Bio.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xaml" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Alphabets\AlphabetConversion.cs" />
+    <Compile Include="Alphabets\AlphabetType.cs" />
+    <Compile Include="Sequences.Annotations\Annotation.cs" />
+    <Compile Include="Sequences.Annotations\AnnotationList.cs" />
+    <Compile Include="Common.XML\IToXml.cs" />
+    <Compile Include="Common.XML\IXmlConvertable.cs" />
+    <Compile Include="Common.XML\XMLHelper.cs" />
+    <Compile Include="Patterns\AlignmentPosition.cs" />
+    <Compile Include="Patterns\Any.cs" />
+    <Compile Include="Patterns\AutoName.cs" />
+    <Compile Include="Patterns\Composition.cs" />
+    <Compile Include="Patterns\Definition.cs" />
+    <Compile Include="Patterns\DefinitionList.cs" />
+    <Compile Include="Patterns\IMatcher.cs" />
+    <Compile Include="Patterns\Import.cs" />
+    <Compile Include="Patterns\IPattern.cs" />
+    <Compile Include="Patterns\Match.cs" />
+    <Compile Include="Patterns\MatcherALL.cs" />
+    <Compile Include="Patterns\MatcherBest.cs" />
+    <Compile Include="Patterns\Motif.cs" />
+    <Compile Include="Patterns\NonStructuredPatternException.cs" />
+    <Compile Include="Patterns\Parameter.cs" />
+    <Compile Include="Patterns\ParameterList.cs" />
+    <Compile Include="Patterns\Pattern.cs" />
+    <Compile Include="Patterns\PatternFlexible.cs" />
+    <Compile Include="Patterns\Reader.cs" />
+    <Compile Include="Patterns\VoidPattern.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Sequences.Annotation\AnnotatedList.cs" />
+    <Compile Include="Sequences.Annotation\FeatureList.cs" />
+    <Compile Include="Sequences.Annotation\IAnnotated.cs" />
+    <Compile Include="Sequences.Annotation\RegionList.cs" />
+    <Compile Include="Sequences.Annotation\SequenceList.cs" />
+    <Compile Include="Sequence\Feature.cs" />
+    <Compile Include="Sequence\Strand.cs" />
+    <Compile Include="Symbols\Symbol.cs" />
+    <Compile Include="Symbols\SymbolMeta.cs" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
