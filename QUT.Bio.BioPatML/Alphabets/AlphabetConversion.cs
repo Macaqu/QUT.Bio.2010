@@ -16,5 +16,14 @@ namespace QUT.Bio.BioPatML.Alphabets
                 default: return null;
             }
         }
+
+        public static bool IsValidSymbols(IAlphabet alphabet, char symbol) {
+            
+            if (alphabet.GetValidSymbols().Contains((byte)symbol)) {
+                return true;
+            }
+
+            return false;
+        }
     }
 }

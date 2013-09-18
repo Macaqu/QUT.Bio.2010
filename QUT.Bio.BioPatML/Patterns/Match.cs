@@ -36,6 +36,8 @@ namespace QUT.Bio.BioPatML.Patterns
         private int p;
         private long p_2;
         private int p_3;
+        private int position;
+        private int bestLen;
 
         /** <summary> The similarity of the match within the interval [0,1] 1.0 means perfect/maximum match.  </summary> */
 
@@ -87,6 +89,16 @@ namespace QUT.Bio.BioPatML.Patterns
         {
             this.MatchPattern = pattern;
             Set(sequence, start, length, strand, similarity);
+        }
+
+        public Match(ISequence sequence, int position, int bestLen, Sequences.Strand strand, double similarity)
+        {
+            // TODO: Complete member initialization
+            this.sequence = sequence;
+            this.position = position;
+            this.bestLen = bestLen;
+            this.Strand = strand;
+            this.similarity = similarity;
         }
 
 
@@ -280,7 +292,7 @@ namespace QUT.Bio.BioPatML.Patterns
         {
             return subMatches.Count > 0
                 ? subMatches.Sum(match => match.CalcLength())
-                : this.BaseSequence.Count;
+                : (int)this.BaseSequence.Count;
         }
 
         /// <summary> Creates a string representation.

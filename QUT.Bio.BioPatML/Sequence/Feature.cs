@@ -362,7 +362,7 @@ namespace QUT.Bio.BioPatML.Sequences
             throw new NotImplementedException();
         }
 
-        public Sequence BaseSequence
+        public ISequence BaseSequence
         {
             get;
             set;
@@ -396,5 +396,7 @@ namespace QUT.Bio.BioPatML.Sequences
             this.End = element.Int("End");
             Strand = Strand.Parse("Strand");
         }
+
+        
     }
 }

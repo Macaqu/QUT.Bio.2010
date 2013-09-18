@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Xml.Linq;
-//using QUT.Bio.BioPatML.Sequences;
+using QUT.Bio.BioPatML.Sequences;
 using Bio;
 using QUT.Bio.BioPatML.Common.XML;
 
@@ -58,8 +58,7 @@ namespace QUT.Bio.BioPatML.Patterns {
 			ISequence sequence, 
 			int position 
 		) {
-			LatestMatch.Set( sequence, position, NextLength(), 1, 1.0 );
-			return LatestMatch;
+			return new Match( sequence, position, NextLength(), Strand.Forward, 1.0 );
 		}
 
 		/// <summary>

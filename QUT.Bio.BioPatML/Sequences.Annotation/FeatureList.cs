@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using QUT.Bio.BioPatML.Sequences.Annotations;
+using Bio;
 
 /***************************************************************************
  *  Original Author          : Dr Stefan Maetschke 
@@ -18,7 +19,7 @@ namespace QUT.Bio.BioPatML.Sequences.List {
 	/// </summary>
 	public sealed class FeatureList : RegionList<Feature> {
 		/** Reference to the sequence the feature list is attached to */
-		private Sequence sequence;
+		private ISequence sequence;
 
 		#region -- Public Constructors --
 
@@ -48,7 +49,7 @@ namespace QUT.Bio.BioPatML.Sequences.List {
 		public void AttachSequence ( Sequence sequence ) {
 			foreach ( var feature in this ) {
 				if ( feature.BaseSequence == this.sequence ) {
-					feature.SetSequence( sequence );
+                    feature.BaseSequence = sequence;//.SetSequence( sequence );
 				}
 			}
 
@@ -85,7 +86,8 @@ namespace QUT.Bio.BioPatML.Sequences.List {
 		public void Add ( Feature feature, bool setSequence ) {
 			base.Add( feature );
 			if ( setSequence )
-				feature.SetSequence( sequence );
+                feature.BaseSequence = sequence;
+                //feature.SetSequence( sequence );
 		}
 
 		/// <summary>
@@ -101,8 +103,9 @@ namespace QUT.Bio.BioPatML.Sequences.List {
 		public void Add ( int index, Feature feature, bool setSequence ) {
 			base.Insert( index, feature );
 
-			if ( setSequence )
-				feature.SetSequence( sequence );
+            if (setSequence)
+                feature.BaseSequence = sequence;
+                //feature.SetSequence( sequence );
 		}
 
 		/// <summary>
@@ -124,14 +127,13 @@ namespace QUT.Bio.BioPatML.Sequences.List {
 		///<returns> Returns the first feature which covers the given position or
 		/// null if none of the features in the list contain the given position. 
 		///</returns>
-
+        /*
 		public Feature Inside ( Sequence sequence, int position ) {
 			return this.FirstOrDefault( feature => feature.IsInside( sequence, position ) );
 		}
-
-		/// <summary>
-		///  Creates a string representation of a feature list.
+        */
 		/// </summary>
+        /// 
 		/// <returns></returns>
 
 		public override string ToString () {

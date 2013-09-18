@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Xml;
 //using QUT.Bio.BioPatML.Symbols;
-//using QUT.Bio.BioPatML.Sequences;
+using QUT.Bio.BioPatML.Sequences;
 //using QUT.Bio.BioPatML.Alphabets;
 using QUT.Bio.BioPatML.Common.XML;
 using Bio;
@@ -79,7 +79,6 @@ namespace QUT.Bio.BioPatML.Patterns
                 increment = 0;
                 Counter++;
 
-                int forward = 1;
                 double sum = 0.0;
                 for (int len = 0; len < CurrLength; len++)
                     sum += Composition.Weight((char)sequence[(long)(position + len)]);
@@ -95,8 +94,8 @@ namespace QUT.Bio.BioPatML.Patterns
                 if (similarity < Composition.Threshold)
                     return null;
 
-                match.Set(sequence, position, CurrLength, forward, similarity);
-                return match;
+                return new Match(sequence, position, CurrLength, Strand.Forward, similarity);
+                //return match;
             }
 
             /// <summary>

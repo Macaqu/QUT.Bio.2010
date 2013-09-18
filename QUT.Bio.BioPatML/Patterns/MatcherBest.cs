@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Xml;
 //using QUT.Bio.BioPatML.Symbols;
-//using QUT.Bio.BioPatML.Sequences;
+using QUT.Bio.BioPatML.Sequences;
 //using QUT.Bio.BioPatML.Alphabets;
 using QUT.Bio.BioPatML.Common.XML;
 using Bio;
@@ -107,13 +107,11 @@ namespace QUT.Bio.BioPatML.Patterns
                     }
                 }
 
-                int forward = 1;
                 double similarity = bestSum / (bestLen * Composition.MaxWeight);
                 if (similarity < Composition.Threshold)
                     return null;
-
-                match.Set(sequence, position, bestLen, forward, similarity);
-                return match;
+                return new Match(sequence, position, bestLen, Strand.Forward, similarity);
+                
             }
 
             #endregion

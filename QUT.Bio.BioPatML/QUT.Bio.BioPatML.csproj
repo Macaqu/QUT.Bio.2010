@@ -46,6 +46,13 @@
   <ItemGroup>
     <Compile Include="Alphabets\AlphabetConversion.cs" />
     <Compile Include="Alphabets\AlphabetType.cs" />
+    <Compile Include="Patterns\ChildNotFoundException.cs" />
+    <Compile Include="Patterns\Constraint.cs" />
+    <Compile Include="Patterns\Iteration.cs" />
+    <Compile Include="Patterns\Logic.cs" />
+    <Compile Include="Patterns\PatternComplex.cs" />
+    <Compile Include="Patterns\PatternList.cs" />
+    <Compile Include="Patterns\PWM.cs" />
     <Compile Include="Sequences.Annotations\Annotation.cs" />
     <Compile Include="Sequences.Annotations\AnnotationList.cs" />
     <Compile Include="Common.XML\IToXml.cs" />

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Xml;
 using QUT.Bio.BioPatML.Common.XML;
+using QUT.Bio.BioPatML.Sequences;
 using System.Xml.Linq;
 using Bio;
 
@@ -48,8 +49,8 @@ namespace QUT.Bio.BioPatML.Patterns {
 		/// <param name="position">position of match</param>
 		/// <returns></returns>
 		public override Match Match ( ISequence sequence, int position ) {
-			LatestMatch.Set( sequence, position, 0, 1, 1.0 );
-			return LatestMatch;
+			return new Match( sequence, position, 0, Strand.Forward, 1.0 );
+			
 		}
 
 		#endregion

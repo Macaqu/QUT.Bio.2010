@@ -80,7 +80,7 @@ namespace TestBioPatML.TestPatterns
 			Composition composition = new Composition( "Composition", Alphabets.DNA, 1, 7, 1.7, Composition.MatchMode.ALL, 0.0 );
             Match match;
             match = composition.Match(seq, 1);
-            Assert.AreEqual(1, match.Count);
+            Assert.AreEqual(1, (int)match.Count);
             Assert.AreEqual(0, composition.Increment);
             Assert.AreEqual("a", match);
             match = composition.Match(seq, 1);
@@ -114,19 +114,19 @@ namespace TestBioPatML.TestPatterns
             Assert.AreEqual(2, match.Count);
             Assert.AreEqual(1, match.Start);
             Assert.AreEqual(2, match.End);
-            Assert.AreEqual("ac", match.Letters());
+            Assert.AreEqual("ac", match.BaseSequence);
             Assert.AreEqual(0.5, match.Similarity, 1e-2);
 
             match = match.SearchBest(0, 0, composition);
             Assert.AreEqual(2, match.Start);
-            Assert.AreEqual("ct", match.Letters());
+            Assert.AreEqual("ct", match.BaseSequence);
             Assert.AreEqual(0.83, match.Similarity, 1e-2);
 
             var matches = match.Search(0, 0, composition);
             Assert.AreEqual(3, matches.Count);
-            Assert.AreEqual("ac", matches[0].Letters());
-            Assert.AreEqual("act", matches[1].Letters());
-            Assert.AreEqual("ct", matches[2].Letters());
+            Assert.AreEqual("ac", match.BaseSequence);
+            Assert.AreEqual("act", match.BaseSequence);
+            Assert.AreEqual("ct", match.BaseSequence);
         }
 
 
