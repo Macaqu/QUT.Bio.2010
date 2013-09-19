@@ -142,7 +142,7 @@ namespace QUT.Bio.BioPatML.Patterns {
 
 		public static void Parse(
 			string sequence,
-			List<Symbol> symbols,
+			List<char> symbols,
 			 IAlphabet alphabet
 		) {
 			

@@ -256,21 +256,16 @@ namespace QUT.Bio.BioPatML.Patterns {
 		}
 
         private bool IsValidAlphabet(char symbol, int offset, int length) {
-            bool isValid = false;
             byte[] symbolsArray = new byte[] {(byte)symbol};
 
-            if(this.alphabet.Equals(Alphabets.DNA)){
-                isValid = Alphabets.DNA.ValidateSequence(symbolsArray, (long)offset, (long)length);
+            if( this.alphabet.Equals(DnaAlphabet.Instance) ||
+                this.alphabet.Equals(RnaAlphabet.Instance) ||
+                this.alphabet.Equals(ProteinAlphabet.Instance) 
+                ){
+                return alphabet.ValidateSequence(symbolsArray, (long)offset, (long)length);
             }
-            else if (this.alphabet.Equals(Alphabets.RNA))
-            {
-                isValid = Alphabets.RNA.ValidateSequence(symbolsArray, (long)offset, (long)length);
-            }
-            if (this.alphabet.Equals(Alphabets.Protein))
-            {
-                isValid = Alphabets.Protein.ValidateSequence(symbolsArray, (long)offset, (long)length);
-            }
-            return isValid;
+            
+            return false;
         }
 
 		/// <summary>
@@ -326,21 +321,23 @@ namespace QUT.Bio.BioPatML.Patterns {
 
 
         private string GetAlphabetName() { 
-            string alphabetName = String.Empty;
             
-            if (alphabet.Equals(Alphabets.DNA))
+            if (alphabet.Equals(DnaAlphabet.Instance))
             {
-                alphabetName = "DNA";
+                return "DNA";
             }
-            else if (alphabet.Equals(Alphabets.RNA))
+            else if (alphabet.Equals(RnaAlphabet.Instance))
             {
-                alphabetName = "RNA";
+                return "RNA";
             }
-            else if(alphabet.Equals(Alphabets.Protein)){
-                alphabetName = "AA";
-            } 
-
-            return alphabetName;
+            else if (alphabet.Equals(ProteinAlphabet.Instance))
+            {
+                return "AA";
+            }
+            else {
+                return string.Empty;
+            }
+        
         }
 
 		/// <summary> Saves the contents of this object in an xml element.

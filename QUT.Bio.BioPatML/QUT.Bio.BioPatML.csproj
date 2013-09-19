@@ -46,6 +46,10 @@
   <ItemGroup>
     <Compile Include="Alphabets\AlphabetConversion.cs" />
     <Compile Include="Alphabets\AlphabetType.cs" />
+    <Compile Include="Common.Structures\HistogramChar.cs" />
+    <Compile Include="Common.Structures\MapChar.cs" />
+    <Compile Include="Common.Structures\PrimitiveParse.cs" />
+    <Compile Include="Common.Structures\SArray.cs" />
     <Compile Include="Patterns\ChildNotFoundException.cs" />
     <Compile Include="Patterns\Constraint.cs" />
     <Compile Include="Patterns\Iteration.cs" />
@@ -86,6 +90,7 @@
     <Compile Include="Sequences.Annotation\SequenceList.cs" />
     <Compile Include="Sequence\Feature.cs" />
     <Compile Include="Sequence\Strand.cs" />
+    <Compile Include="Statistic\HistogramSymbol.cs" />
     <Compile Include="Symbols\Symbol.cs" />
     <Compile Include="Symbols\SymbolMeta.cs" />
   </ItemGroup>

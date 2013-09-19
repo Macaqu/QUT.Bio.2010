@@ -13,6 +13,7 @@ using QUT.Bio.BioPatML.Statistic;
 using System.Globalization;
 using QUT.Bio.Util;
 using Bio;
+using System.Collections;
 
 /*****************| Queensland University Of Technology |********************
  *  Original Author          : Dr Stefan Maetschke 
@@ -54,9 +55,12 @@ namespace QUT.Bio.BioPatML.Patterns {
 
 		/// <summary> Maps a symbol to a weight vector
 		/// </summary>
-
+        /*
 		protected Dictionary<Symbol, double[]> map
-                     = new Dictionary<BioPatML.Symbols.Symbol, double[]>();
+                     = new Dictionary<BioPatML.Symbols.Symbol, double[]>();*/
+        protected Dictionary<char, double[]> map
+                     = new Dictionary<char, double[]>();
+
 
 		/// <summary> length of the weight vectors
 		/// </summary>
@@ -94,13 +98,13 @@ namespace QUT.Bio.BioPatML.Patterns {
 		/// conensus as symbol array
 		/// </summary>
 
-		protected Symbol[] consensus;
+		protected char[] consensus;
 
 		/// <summary>
 		///  anti-consensus
 		/// </summary>
 
-		protected Symbol[] antiConsensus;
+		protected char[] antiConsensus;
 
 		#region -- Constructors --
 
@@ -118,7 +122,7 @@ namespace QUT.Bio.BioPatML.Patterns {
 		/// <param name="threshold">Similarity threshold.</param>
 		public PWM (
 			string name,
-			Alphabet alphabet,
+			IAlphabet alphabet,
 			double threshold
 		)
 			: base( name ) {
@@ -137,28 +141,29 @@ namespace QUT.Bio.BioPatML.Patterns {
 		/// <param name="threshold">Similarity threshold. </param>
 		public PWM ( 
 			string name, 
-			Alphabet alphabet, 
+			IAlphabet alphabet, 
 			string motif, 
 			double threshold 
 		)
 			: base( name ) {
 			SetupPWM( alphabet, threshold );
 
-			List<Symbol> symbols = new List<Symbol>();
+			List<char> symbols = new List<char>();
 			
 			Motif.Parse( motif, symbols, alphabet );
 
-			foreach ( Symbol sym in alphabet ) {
-				Add( sym, new double[symbols.Count] );
+			foreach ( char sym in alphabet ) {
+				Add( sym, new double[(int)symbols.Count] );
 			}
 
 			for ( int i = 0; i < symbols.Count; i++ ) {
-				for ( int j = 0; j < alphabet.Count( false ); j++ ) {
-					Symbol symbol = alphabet[j, false];
-					Set( symbol, i, symbols[i].Equals( symbol ) ? 100.0 : 1.0 );
+				for ( int j = 0; j < alphabet.Count; j++ ) {
+					char symbol = (char)alphabet[j];
+                    Set(symbol, i, alphabet.GetValidSymbols().Contains((byte)symbols[i]) ? 100.0 : 1.0);
 				}
 			}
-		}
+		    
+        }
 
 		#endregion -- Public Constructors --
 
@@ -177,20 +182,20 @@ namespace QUT.Bio.BioPatML.Patterns {
 		/// <summary>
 		/// Getter for the consensus of the PWM.
 		/// </summary>
-		public Sequence Consensus {
+		public ISequence Consensus {
 			get {
 				return
-					( new Sequence( Alphabet, consensus, false ) );
+					( new Sequence( Alphabet, consensus.ToString() /*, false*/ ) );
 			}
 		}
 
 		/// <summary>
 		/// Getter for the anti-consensus of the PWM.
 		/// </summary>
-		public Sequence AntiConsensus {
+		public ISequence AntiConsensus {
 			get {
 				return
-					( new Sequence( Alphabet, antiConsensus, false ) );
+					( new Sequence( Alphabet, antiConsensus.ToString() /*, false*/ ) );
 			}
 		}
 
@@ -203,7 +208,7 @@ namespace QUT.Bio.BioPatML.Patterns {
 		/// </summary>
 		/// <param name="alphabet"></param>
 		/// <param name="threshold"></param>
-		private void SetupPWM ( Alphabet alphabet, double threshold ) {
+		private void SetupPWM ( IAlphabet alphabet, double threshold ) {
 			this.Alphabet = alphabet;
 			this.Threshold = threshold;//Access level error
 		}
@@ -214,8 +219,8 @@ namespace QUT.Bio.BioPatML.Patterns {
 		/// <param name="length">Length of the PWM.</param>
 		protected void Init ( int length ) {
 			this.WeightedVectorLength = length;
-			this.consensus = new Symbol[length];
-			this.antiConsensus = new Symbol[length];
+			this.consensus = new char[length];
+			this.antiConsensus = new char[length];
 		}
 
 
@@ -225,7 +230,7 @@ namespace QUT.Bio.BioPatML.Patterns {
 		/// <param name="symbol">Symbol. Unknown symbols will be ignored.</param>
 		/// <param name="index">A zero based index for the weight array.</param>
 		/// <param name="weight">The weight value to set.</param>
-		public void Set ( Symbol symbol, int index, double weight ) {
+		public void Set ( char symbol, int index, double weight ) {
 			double[] weights = Get( symbol );
 			if ( weights != null )
 				weights[index] = weight;
@@ -233,50 +238,8 @@ namespace QUT.Bio.BioPatML.Patterns {
 			UpdateMinMaxScore();
 		}
 
-		/// <summary>
-		/// Setter for the weight of the given letter at the index position. 
-		/// </summary>
-		/// <param name="letter"> Letter of the PWM alphabet.</param>
-		/// <param name="index"> A zero based index for the weight array.</param>
-		/// <param name="weight"> The weight value to set.  </param>
-		public void Set ( char letter, int index, double weight ) {
-			Set( Alphabet[letter], index, weight );
-		}
-
 
 		#region Add Methods
-
-		/// <summary>
-		/// Adds a weight vector for the given alphabet letter to the weight matrix. 
-		/// If the letter is already contained the existing weight vector will be 
-		/// replaced. If the letter is not part of the alphabet it will be replaced
-		/// by the default letter of the alphabet (If no default letter is set an
-		/// exception will be thrown).
-		/// </summary>
-		/// <param name="letter"> Letter, e.g. Nucleotide or amino acid letter.  </param>
-		/// <param name="weights">
-		/// Weight vector. All vectors added to the matrix must be
-		/// of the same length otherwise an ArgumentOutOfRangeException will be thrown.
-		/// </param>
-		public void Add ( char letter, double[] weights ) {
-			this.Add( Alphabet[letter], weights );
-		}
-
-		/// <summary>
-		/// Adds a weight vector (described as string) for the given letter to the 
-		/// weight matrix.
-		/// </summary>
-		/// <param name="letter">
-		///  Letter, e.g. Nucleotide or amino acid letter of the  alphabet the PWM is using. 
-		/// </param>
-		/// <param name="weights">
-		/// Weight vector as string. Valid delimiters are ";,: ".
-		/// All vectors added to the matrix must be of the same length otherwise an 
-		/// ArgumentOutOfRangeException will be thrown.
-		/// </param>
-		public void Add ( char letter, String weights ) {
-			Add( Alphabet[letter], weights );
-		}
 
 		/// <summary>
 		/// Adds a weight vector for the given symbol to the weight matrix. If the
@@ -289,7 +252,7 @@ namespace QUT.Bio.BioPatML.Patterns {
 		/// Weight vector. All vectors added to the matrix must be
 		/// of the same length. Otherwise an ArgumentOutOfRangeException will be thrown.
 		/// </param>
-		public void Add ( Symbol symbol, double[] weights ) {
+		public void Add ( char symbol, double[] weights ) {
 			if ( WeightedVectorLength == 0 )
 				Init( weights.Length );
 
@@ -306,20 +269,8 @@ namespace QUT.Bio.BioPatML.Patterns {
 			UpdateMinMaxScore();
 		}
 
-		/// <summary>
-		/// Adds a weight vector (described as string) for the given symbol to the 
-		/// weight matrix.
-		/// </summary>
-		/// <param name="symbol">Symbol, e.g. Nucleotide or amino acid symbol. </param>
-		/// <param name="weights">
-		/// Weight vector as string. Valid delimiters are ";,: ".
-		/// All vectors added to the matrix must be of the same length otherwise an 
-		/// ArgumentOutOfRangeException will be thrown.
-		/// </param>
-		public void Add ( Symbol symbol, String weights ) {
-			Add( symbol, PrimitiveParse.StringToDoubleArray( weights ) );
-		}
-
+       
+		
 
 
 
@@ -334,19 +285,9 @@ namespace QUT.Bio.BioPatML.Patterns {
 		/// of the PWM in the index column.</param>
 		/// <param name="index">A zero based index for the weight array.</param>
 		/// <returns>Returns the weight for the symbol at the index position.  </returns>
-		public double Get ( Symbol symbol, int index ) {
+		public double Get ( char symbol, int index ) {
 			double[] weights = Get( symbol );
 			return ( weights == null ? Get( antiConsensus[index], index ) : weights[index] );
-		}
-
-		/// <summary>
-		/// Getter for the weight of the given letter at the index position. 
-		/// </summary>
-		/// <param name="letter">Letter of the PWM alphabet. </param>
-		/// <param name="index">A zero based index for the weight array.</param>
-		/// <returns>Returns the weight for the symbol at the index position.  </returns>
-		public double Get ( char letter, int index ) {
-			return ( Get( Alphabet[letter], index ) );
 		}
 
 		/// <summary>
@@ -357,23 +298,12 @@ namespace QUT.Bio.BioPatML.Patterns {
 		/// Returns the weight array for this symbol or null if the symbol
 		/// is not in the PWM.
 		/// </returns>
-		public double[] Get ( Symbol symbol ) {
+		public double[] Get ( char symbol ) {
 			//Fixed to accomodate C#'s dictionary method   
 			return map.ContainsKey( symbol ) ? ( map[symbol] ) : null;
 		}
 
-		/// <summary>
-		/// Getter for the weight array assigned to the given letter. 
-		/// </summary>
-		/// <param name="letter">Letter of the PWM alphabet. </param>
-		/// <returns>
-		/// Returns the weight array for this letter or null if the letter
-		/// is not in the PWM.
-		/// </returns>
-		public double[] Get ( char letter ) {
-			return ( Get( Alphabet[letter] ) );
-		}
-
+		
 		#endregion
 
 		/// <summary>
@@ -385,18 +315,18 @@ namespace QUT.Bio.BioPatML.Patterns {
 		/// <param name="sequence"></param>
 		/// <param name="position"></param>
 		/// <returns></returns>
-		public override Match Match ( BioPatML.Sequences.Sequence sequence, int position ) {
+		public override Match Match ( ISequence sequence, int position ) {
 			double sim = 0;
 
 			for ( int i = 0; i < WeightedVectorLength; i++ )
-				sim += Get( sequence.GetSymbol( position + i ), i );
+				sim += Get( (char)sequence[(long)i], i );
 
 			sim = ( sim - MinScore ) / RangeScore;
 
 			if ( sim < Threshold )
 				return null;
 
-			LatestMatch.Set( sequence, position, WeightedVectorLength, sequence.Strand, sim );
+			LatestMatch.Set( sequence, position, WeightedVectorLength, Strand.Forward, sim );
 			return ( LatestMatch );
 		}
 
@@ -407,11 +337,11 @@ namespace QUT.Bio.BioPatML.Patterns {
 		/// <param name="col">Column the sorting index should be generated for.</param>
 		/// <returns>Returns an array with symbols. First entry is the symbol with
 		/// the lowest weight.</returns>
-		public Symbol[] SortingIndex ( int col ) {
+		public char[] SortingIndex ( int col ) {
 			int n = 1;
-			Symbol[] symbols = new Symbol[SymbolNumber];
+			char[] symbols = new char[SymbolNumber];
 
-			foreach ( Symbol sym in map.Keys ) {
+			foreach ( char sym in map.Keys ) {
 				for ( int i = 0; i < n; i++ ) {
 					if ( symbols[i] == null || Get( sym, col ) < Get( symbols[i], col ) ) {
 						for ( int j = n - 1; j > i; j-- )
@@ -435,7 +365,7 @@ namespace QUT.Bio.BioPatML.Patterns {
 		/// </summary>
 		/// <param name="symbol"></param>
 		/// <param name="index"></param>
-		private void UpdateConsensus ( Symbol symbol, int index ) {
+		private void UpdateConsensus ( char symbol, int index ) {
 			double weight = Get( symbol, index );
 
 			if ( consensus[index] == null || Get( consensus[index], index ) < weight )
@@ -492,7 +422,7 @@ namespace QUT.Bio.BioPatML.Patterns {
 						( "Invalid start or end parameter!" );
 
 
-			foreach ( Symbol sym in map.Keys ) {
+			foreach ( char sym in map.Keys ) {
 				double[] weights = new double[length];
 
 				for ( int i = 0; i < length; i++ )
@@ -512,8 +442,8 @@ namespace QUT.Bio.BioPatML.Patterns {
 		public override string ToString () {
 			StringBuilder sb = new StringBuilder();
 
-			foreach ( Symbol sym in map.Keys ) {
-				sb.Append( sym.Letter ).Append( ":\t" );
+			foreach ( char sym in map.Keys ) {
+				sb.Append( sym ).Append( ":\t" );
 				for ( int col = 0; col < WeightedVectorLength; col++ )
 					sb.Append( string.Format( "% 3.2f ", Get( sym, col ) ) );
 				sb.Append( "\n" );
@@ -554,7 +484,7 @@ namespace QUT.Bio.BioPatML.Patterns {
 
 			double log2 = Math.Log( 2 );
 			int endPosition = startPosition + WeightedVectorLength - 1;
-			int symNumber = sequenceList[0].Alphabet.Count( false );
+			int symNumber = (int)sequenceList[0].Alphabet.Count;
 			double ic = 0; //information content
 			HistogramSymbol histo = new HistogramSymbol();
 
@@ -566,16 +496,16 @@ namespace QUT.Bio.BioPatML.Patterns {
 			for ( int pos = startPosition; pos <= endPosition; pos++ ) {
 				histo.Clear(); //reset the histogram of symbols for 1 column
 				for ( int seqIndex = 0; seqIndex < sequenceList.Count; seqIndex++ ) {
-					Sequence seq = sequenceList[seqIndex];
+					ISequence seq = sequenceList[seqIndex];
 					if ( seq.Alphabet != Alphabet )
 						throw new ArgumentException
 							( "Alphabet in sequence does not match PWM alphabet: " + Alphabet.Name );
-					histo.Add( seq.GetSymbol( pos ) );
+					histo.Add( (char)seq[pos], seq.Alphabet/*seq.GetSymbol( pos ) */);
 				}
 
 				int sum = histo.Sum + symNumber;
 				for ( int bin = 0; bin < background.Count; bin++ ) {
-					Symbol symbol = background[bin];
+					char symbol = background[bin];
 					double bp = background.Frequency( symbol );
 					double p = ( histo.HistoValue( symbol ) + 1.0 ) / sum;
 					double w = Math.Log( p / bp ) / log2;
@@ -620,10 +550,20 @@ namespace QUT.Bio.BioPatML.Patterns {
 						throw new ArgumentException( "Invalid alphabet letter '" + letter + "'!" );
 					}
 
-					Add( letter, weights );
+					Add( letter, GetWeight(weights) );
 				}
 			}
 		}
+
+
+        private double[] GetWeight(string weightString) {
+            double[] doubleArray = new double[weightString.Length];
+            for (int i = 0; i < weightString.Length; i++) { 
+                doubleArray[i] = double.Parse(weightString[i]);
+            }
+
+                return null;
+        }
 
 		/// <summary> Express the contents of this PWM as a XElement.
 		/// </summary>
@@ -639,12 +579,37 @@ namespace QUT.Bio.BioPatML.Patterns {
 
 			foreach ( var t in map ) {
 				result.Add( new XElement( "Row",
-					new XAttribute( "letter", t.Key.Letter ),
-					t.Value.Join( "," )
+					new XAttribute( "letter", t.Key ),
+					Join(t.Value ,  "," )
 				) );
 			}
 
 			return result;
 		}
+
+        /// <summary>
+        /// Converts each element in an enumeration into a string, then uses the
+        /// separator string to glue them togehter to form a single string.
+        /// </summary>
+        /// <param name="objectList">A list of objects to be joined.</param>
+        /// <param name="separater">A separator string that will be inserted between the items.</param>
+        /// <returns>A single string containing the concatenated set of string representations.</returns>
+
+        public static string Join(IEnumerable objectList, string separater)
+        {
+            StringBuilder b = new StringBuilder();
+            bool dejaVu = false;
+
+            lock (objectList)
+            {
+                foreach (object x in objectList)
+                {
+                    b.AppendFormat("{0}{1}", (dejaVu ? separater : ""), x);
+                    dejaVu = true;
+                }
+            }
+
+            return b.ToString();
+        }
 	}
 }

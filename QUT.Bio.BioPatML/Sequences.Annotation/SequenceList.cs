@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using QUT.Bio.BioPatML.Sequences.Annotations;
+using Bio;
 
 /***************************************************************************
  *  Original Author          : Dr Stefan Maetschke 
@@ -13,7 +14,7 @@ using QUT.Bio.BioPatML.Sequences.Annotations;
  ***************************************************************************/
 namespace QUT.Bio.BioPatML.Sequences.List {
 	/// <summary> This class describes a list of sequences. </summary>
-	public class SequenceList : RegionList<Sequence> {
+	public class SequenceList : RegionList<ISequence> {
 
 		/// <summary> Creates an empty sequence list. </summary>
 
@@ -28,34 +29,6 @@ namespace QUT.Bio.BioPatML.Sequences.List {
 		public SequenceList ( String name )
 			: base( name ) { /* No implementation */ }
 
-		/// <summary>
-		/// Creates a feature list with all features of the sequences of the list
-		/// which match the given feature name .
-		/// </summary>
-		/// <param name="featureListName">
-		/// Name of the feature lists which contain the features to extract.
-		/// </param>
-		/// <param name="featureName">Feature name.</param>
-		/// <returns>
-		/// Returns a feature list with all features which name matches the
-		/// given feature name over all sequences of the sequence list.
-		/// 
-		/// </returns>
 		
-		public FeatureList Features ( String featureListName, String featureName ) {
-			FeatureList result = new FeatureList( featureListName );
-
-			foreach ( var sequence in this ) {
-				FeatureList list = sequence.FeatureLists.FirstOrDefault(
-					featureList => featureList.Name == featureListName
-				);
-
-				if ( list != null ) {
-					result.AddRange( list.Where( feature => feature.Name == featureName ) );
-				}
-			}
-
-			return result;
-		}
 	}
 }
