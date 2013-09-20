@@ -131,7 +131,7 @@ namespace QUT.Bio.BioPatML.Patterns {
         
 		private static Tuple<string, Type> [] lookup = {
 			new Tuple<string, Type>( "Any", typeof(Any) ),
-			//new Tuple<string, Type>( "Alignment", typeof(Alignment) ),
+			new Tuple<string, Type>( "Alignment", typeof(Alignment) ),
 			new Tuple<string, Type>( "Composition", typeof(Composition) ),
 			new Tuple<string, Type>( "Constraint", typeof(Constraint) ),
 			new Tuple<string, Type>( "Iteration", typeof(Iteration) ),
@@ -140,11 +140,11 @@ namespace QUT.Bio.BioPatML.Patterns {
 			new Tuple<string, Type>( "PWM", typeof(PWM) ),
 			new Tuple<string, Type>( "Regex", typeof(RegularExp) ),
 			new Tuple<string, Type>( "Prosite", typeof(Prosite) ),
-			//new Tuple<string, Type>( "Block", typeof(Block) ),
-			//new Tuple<string, Type>( "Gap", typeof(Gap) ),
-			//new Tuple<string, Type>( "Repeat", typeof(Repeat) ),
-			new Tuple<string, Type>( "Void", typeof(VoidPattern) )//,
-			//new Tuple<string, Type>( "Use", typeof(Use) ),
+			new Tuple<string, Type>( "Block", typeof(Block) ),
+			new Tuple<string, Type>( "Gap", typeof(Gap) ),
+			new Tuple<string, Type>( "Repeat", typeof(Repeat) ),
+			new Tuple<string, Type>( "Void", typeof(VoidPattern) ),
+			new Tuple<string, Type>( "Use", typeof(Use) ),
 		};
         
 		private static Tuple<string, Type, Type> [] allOrBestLookup = {

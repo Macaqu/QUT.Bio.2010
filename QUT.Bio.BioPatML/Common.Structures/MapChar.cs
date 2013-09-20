@@ -333,10 +333,10 @@ namespace QUT.Bio.BioPatML.Common.Structures {
 		/// <returns></returns>
 		public IEnumerator GetEnumerator () {
 
-			List<Symbol> collection = new List<Symbol>();
+			List<char> collection = new List<char>();
 
 			for ( int i = 0; i < Size; i++ )
-				collection.Add( (Symbol) Get( i ) );
+				collection.Add( (char) Get( i ) );
 
 			//IEnumerable<object> myEnumerable = collection;
 

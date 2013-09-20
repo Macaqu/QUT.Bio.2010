@@ -11,7 +11,7 @@ using QUT.Bio.BioPatML.Sequences.List;
 using QUT.Bio.BioPatML.Symbols;
 using QUT.Bio.BioPatML.Statistic;
 using System.Globalization;
-using QUT.Bio.Util;
+using QUT.Bio.BioPatML.Util;
 using Bio;
 using System.Collections;
 
@@ -580,36 +580,13 @@ namespace QUT.Bio.BioPatML.Patterns {
 			foreach ( var t in map ) {
 				result.Add( new XElement( "Row",
 					new XAttribute( "letter", t.Key ),
-					Join(t.Value ,  "," )
+					UtilHelper.Join(t.Value ,  "," )
 				) );
 			}
 
 			return result;
 		}
 
-        /// <summary>
-        /// Converts each element in an enumeration into a string, then uses the
-        /// separator string to glue them togehter to form a single string.
-        /// </summary>
-        /// <param name="objectList">A list of objects to be joined.</param>
-        /// <param name="separater">A separator string that will be inserted between the items.</param>
-        /// <returns>A single string containing the concatenated set of string representations.</returns>
-
-        public static string Join(IEnumerable objectList, string separater)
-        {
-            StringBuilder b = new StringBuilder();
-            bool dejaVu = false;
-
-            lock (objectList)
-            {
-                foreach (object x in objectList)
-                {
-                    b.AppendFormat("{0}{1}", (dejaVu ? separater : ""), x);
-                    dejaVu = true;
-                }
-            }
-
-            return b.ToString();
-        }
+        
 	}
 }
