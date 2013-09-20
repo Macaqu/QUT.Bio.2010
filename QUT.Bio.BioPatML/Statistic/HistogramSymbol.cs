@@ -32,7 +32,7 @@ namespace QUT.Bio.BioPatML.Statistic
         /// <summary>
         /// Holds the counters for all symbol names */
         /// </summary>
-        private Dictionary<String, Counter> DictionaryCounter = new Dictionary<string,Counter>();
+        private Dictionary<String, Counter> DictionaryCounter = new Dictionary<String,Counter>();
 
         /** this list gives linear access to the histogram elements */
         private List<Counter> list = new List<Counter>();
@@ -70,10 +70,10 @@ namespace QUT.Bio.BioPatML.Statistic
         ///  Adds all symbols contained in the given sequence to the histogram.
         /// </summary>
         /// <param name="sequence"> The sequence with sysmbols to add. </param>
-        public void Add(ISequence sequence)
+        public void Add(ISequence sequence, IAlphabet alphabet)
         {
             for (int pos = 1; pos <= sequence.Count; pos++)
-                Add((char)sequence[pos]);
+                Add((char)sequence[pos], alphabet);
         }
 
         /// <summary>

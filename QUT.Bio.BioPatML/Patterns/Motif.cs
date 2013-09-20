@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Xml;
 using System.Xml.Linq;
+
 using QUT.Bio.BioPatML.Symbols;
 using QUT.Bio.BioPatML.Alphabets;
 using QUT.Bio.BioPatML.Common.XML;
@@ -30,7 +31,7 @@ namespace QUT.Bio.BioPatML.Patterns {
 
 		/// <summary> List of symbols in this motif element
 		/// </summary>
-		private List<Symbol> motifSymbols = new List<Symbol>();
+        private List<String> motifSymbols = new List<String>();
 
 		/// <summary> Internal constructor for deserialization.
 		/// </summary>
@@ -78,24 +79,34 @@ namespace QUT.Bio.BioPatML.Patterns {
 			get {
 				StringBuilder sb = new StringBuilder();
 
-				foreach ( Symbol sym in motifSymbols ) {
-					if ( sym is SymbolMeta) {
-						sb.Append( "[" + ( (SymbolMeta) sym ).Letters + "]" );
+				foreach ( String sym in motifSymbols ) {
+					if ( IsValidSymbol(sym)) { 
+						sb.Append( "[" + sym + "]" );
 					}
 					else {
-						sb.Append( sym.Letter);
+						sb.Append( sym);
 					}
 				}
-
+               // IAlphabet alp = DnaAlphabet.Instance;
 				return sb.ToString();
 			}
 		}
 
-        private bool IsValidSymbol(char symbol) {
-            return (alphabet.GetValidSymbols().Contains((byte)symbol));
-        } 
+        private bool IsValidSymbol(String symbol) {
+            byte[] symbolByte = GetSymbolsByte(symbol);
+            for (int i = 0; i < symbolByte.Length; i++)
+            {
+                if (!alphabet.GetValidSymbols().Contains(symbolByte[i])) {
+                    return false;
+                }
+                
+            }
+            return true;
+        }
 
-
+        private byte[] GetSymbolsByte(String symbols) {
+            return Encoding.Unicode.GetBytes(symbols); ;
+        }
 
 		/// <summary> Implementation of the IMatcher interface. An any pattern matches any sequence.
 		/// <see cref="QUT.Bio.BioPatML.Patterns.IMatcher">IMatcher interface</see>.
@@ -142,7 +153,7 @@ namespace QUT.Bio.BioPatML.Patterns {
 
 		public static void Parse(
 			string sequence,
-			List<char> symbols,
+			List<String> symbols,
 			 IAlphabet alphabet
 		) {
 			
@@ -153,16 +164,19 @@ namespace QUT.Bio.BioPatML.Patterns {
             //TODO : will back to this parse method later
             
 			symbols.Clear();
-			SymbolMeta alternative = null;
-			for ( int i = 0; i < sequence.Length; i++ ) {
-				char letter = sequence[i];
+			//SymbolMeta alternative = null;
 
+            List<String> alternative = null;
+            
+            for ( int i = 0; i < sequence.Length; i++ ) {
+				char letter = sequence[i];
+                String name = alphabet.GetFriendlyName((byte)letter);
 				if ( letter == '[' ) {
 					if ( alternative != null ) {
 						throw new ArgumentException( "'[' within alternative is not permitted" );
 					}
 
-					alternative = new SymbolMeta( '#', "ALT", "Alternative" );
+					alternative = new List<String>{ "#", "ALT", "Alternative" }; //letter, code, name
 				}
 
 				else {
@@ -170,16 +184,19 @@ namespace QUT.Bio.BioPatML.Patterns {
 						if ( alternative == null ) {
 							throw new ArgumentException( "Opening bracket for ']' is missing!" );
 						}
-
-						symbols.Add( alternative );
+                        symbols.AddRange(alternative);
+                        //alternative.AddRange(symbols);
+						//symbols..Add( alternative );
 						alternative = null;
 					}
 
 					else if ( alternative != null ) {
-						alternative.Add( new Symbol(letter) );
+                        
+						alternative = new List<String>{letter.ToString(), name.Substring(0,3), name /*new Symbol(letter)*/ };
 					}
 					else {
-                        symbols.Add(new Symbol(letter));
+                        symbols.AddRange(new List<String> { letter.ToString(), name.Substring(0, 3), name /*new Symbol(letter)*/ });
+                        //symbols.Add(new Symbol(letter));
 					}
 				}
 
@@ -202,7 +219,6 @@ namespace QUT.Bio.BioPatML.Patterns {
 		) {
 			base.Parse( element, definition );
             alphabet = AlphabetConversion.Convert(element.EnumValue<AlphabetType>("alphabet"));
-			//alphabet = AlphabetFactory.Instance( element.EnumValue<AlphabetType>( "alphabet" ) );
 			string motif = element.String( "motif" );
 
 			if ( motif == null ) {

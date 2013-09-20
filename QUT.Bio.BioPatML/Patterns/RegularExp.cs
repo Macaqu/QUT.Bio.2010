@@ -8,6 +8,7 @@ using System.Xml.Linq;
 using QUT.Bio.BioPatML.Common.Structures;
 using QUT.Bio.BioPatML.Common.XML;
 using QUT.Bio.BioPatML.Sequences;
+using Bio;
 
 /*****************| Queensland University Of Technology |********************
  *  Original Author          : Dr Stefan Maetschke 
@@ -155,10 +156,10 @@ namespace QUT.Bio.BioPatML.Patterns {
 		/// <returns></returns>
 
 		public override Match Match (
-			Sequence sequence,
+			ISequence sequence,
 			int position
 		) {
-			String charSequence = sequence.Letters( position, sequence.Length );
+			String charSequence = sequence.GetSubSequence((long) position, (long)(sequence.Count - position) ).ToString();
 			int startIndex = position - 1;
 			//String charSequence = sequence.Letters();
 
@@ -189,7 +190,7 @@ namespace QUT.Bio.BioPatML.Patterns {
 
 				Increment = 1;
 				LatestMatch.Set( sequence, foundIndex + 1,
-						  myMatch.Length, sequence.Strand, 1.0 );
+						  myMatch.Length, Strand.Forward, 1.0 );
 
 				//GetMatch().Set(sequence, myMatch.Index + 1,
 				//          myMatch.Length, sequence.Strand, 1.0);
@@ -198,7 +199,7 @@ namespace QUT.Bio.BioPatML.Patterns {
 
 			}
 
-			Increment = Math.Max( 1, sequence.Length - position );
+			Increment = Math.Max( 1, (int)sequence.Count - position );
 			return null;
 		}
 
