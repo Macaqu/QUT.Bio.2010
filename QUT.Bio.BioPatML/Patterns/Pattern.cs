@@ -148,9 +148,9 @@ namespace QUT.Bio.BioPatML.Patterns {
 		};
         
 		private static Tuple<string, Type, Type> [] allOrBestLookup = {
-		//	new Tuple<string, Type, Type>( "Set", typeof(SetAll), typeof(SetBest) ),
-		//	new Tuple<string, Type, Type>( "Series", typeof(SeriesAll), typeof(SeriesBest) ),
-		//	new Tuple<string, Type, Type>( "Profile", typeof(ProfileAll), typeof(ProfileBest) )
+			new Tuple<string, Type, Type>( "Set", typeof(SetAll), typeof(SetBest) ),
+			new Tuple<string, Type, Type>( "Series", typeof(SeriesAll), typeof(SeriesBest) ),
+			new Tuple<string, Type, Type>( "Profile", typeof(ProfileAll), typeof(ProfileBest) )
 		};
         
 		/// <summary> Reads a pattern from a starting specified node. This method

@@ -243,7 +243,7 @@ namespace QUT.Bio.BioPatML.Sequences
         public override string ToString()
         {
             /*
-            StringBuilder sb = new StringBuilder(Name + ": " + Letters() + "'\n\t{ " + Start + ", " + End + ", " + Strand + " }\n");
+            StringBuilder sb = new StringBuilder(Name + ": " + BaseSequence + "'\n\t{ " + Start + ", " + End + ", " + Strand + " }\n");
 
             AnnotationList annotations = base.Annotations;
 
@@ -253,8 +253,8 @@ namespace QUT.Bio.BioPatML.Sequences
             }
 
             return sb.ToString();
-             * */
-            return String.Empty;
+             
+            */return String.Empty;
         }
 
         public IAlphabet Alphabet

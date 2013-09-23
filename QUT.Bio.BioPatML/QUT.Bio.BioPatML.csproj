@@ -50,13 +50,23 @@
     <Compile Include="Common.Structures\MapChar.cs" />
     <Compile Include="Common.Structures\PrimitiveParse.cs" />
     <Compile Include="Common.Structures\SArray.cs" />
+    <Compile Include="Patterns\Alignment.cs" />
+    <Compile Include="Patterns\Block.cs" />
     <Compile Include="Patterns\ChildNotFoundException.cs" />
     <Compile Include="Patterns\Constraint.cs" />
+    <Compile Include="Patterns\Gap.cs" />
     <Compile Include="Patterns\Iteration.cs" />
     <Compile Include="Patterns\Logic.cs" />
     <Compile Include="Patterns\PatternComplex.cs" />
     <Compile Include="Patterns\PatternList.cs" />
+    <Compile Include="Patterns\Prosite.cs" />
     <Compile Include="Patterns\PWM.cs" />
+    <Compile Include="Patterns\RegularExp.cs" />
+    <Compile Include="Patterns\Repeat.cs" />
+    <Compile Include="Patterns\RepeatBase.cs" />
+    <Compile Include="Patterns\RepeatDirect.cs" />
+    <Compile Include="Patterns\RepeatInverted.cs" />
+    <Compile Include="Patterns\Use.cs" />
     <Compile Include="Sequences.Annotations\Annotation.cs" />
     <Compile Include="Sequences.Annotations\AnnotationList.cs" />
     <Compile Include="Common.XML\IToXml.cs" />
@@ -93,6 +103,7 @@
     <Compile Include="Statistic\HistogramSymbol.cs" />
     <Compile Include="Symbols\Symbol.cs" />
     <Compile Include="Symbols\SymbolMeta.cs" />
+    <Compile Include="Util\UtilHelper.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
