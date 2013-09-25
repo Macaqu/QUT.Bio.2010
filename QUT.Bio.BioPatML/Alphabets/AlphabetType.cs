@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace QUT.Bio.BioPatML.Alphabets
+namespace QUT.Bio.BioPatML.Alphabet
 {
     /// <summary> The alphabet types supported by BioPatML.
     /// </summary>

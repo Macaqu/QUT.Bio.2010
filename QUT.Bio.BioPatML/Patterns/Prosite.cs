@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using QUT.Bio.BioPatML.Alphabets;
 //using QUT.Bio.BioPatML.Symbols;
 using QUT.Bio.BioPatML.Common.XML;
 using System.Xml.Linq;
 using Bio;
+using QUT.Bio.BioPatML.Alphabet;
 
 /*****************| Queensland University Of Technology |********************
  *  Original Author          : Dr Stefan Maetschke 

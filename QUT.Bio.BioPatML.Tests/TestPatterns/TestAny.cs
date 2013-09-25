@@ -44,19 +44,19 @@ namespace TestBioPatML.TestPatterns
             ISequence seq = new Sequence(Alphabets.DNA, "actg");
             Match match = any.Match(seq, 2);
 
-            Assert.AreEqual("c", match.Letters());
+            Assert.AreEqual("c", match);
             Assert.AreEqual(0, any.Increment);
 
             any.Match(seq, 2);
-            Assert.AreEqual("ct", match.Letters());
+            Assert.AreEqual("ct", match);
             Assert.AreEqual(0, any.Increment);
 
             any.Match(seq, 2);
-            Assert.AreEqual("ctg", match.Letters());
+            Assert.AreEqual("ctg", match);
             Assert.AreEqual(1, any.Increment);
 
             any.Match(seq, 2);
-            Assert.AreEqual("c", match.Letters());
+            Assert.AreEqual("c", match);
             Assert.AreEqual(0, any.Increment);
 
         }
@@ -68,16 +68,16 @@ namespace TestBioPatML.TestPatterns
             Any any = new Any("Any", 1, 4, 2.0);
             Sequence seq = new Sequence(Alphabets.DNA, "actg");
             Match match = any.Match(seq, 1);
-            Assert.AreEqual("a", match.Letters());
+            Assert.AreEqual("a", match);
             Assert.AreEqual(0, any.Increment);
             any.Match(seq, 1);
-            Assert.AreEqual("act", match.Letters());
+            Assert.AreEqual("act", match);
             Assert.AreEqual(0, any.Increment);
             any.Match(seq, 1);
-            Assert.AreEqual("actg", match.Letters());
+            Assert.AreEqual("actg", match);
             Assert.AreEqual(1, any.Increment);
             any.Match(seq, 1);
-            Assert.AreEqual("a", match.Letters());
+            Assert.AreEqual("a", match);
             Assert.AreEqual(0, any.Increment);
         }
 
@@ -88,22 +88,22 @@ namespace TestBioPatML.TestPatterns
             Any any = new Any("Any", 1, 3, 0.4);
             Sequence seq = new Sequence(Alphabets.DNA, "actg");
             Match match = any.Match(seq, 1);
-            Assert.AreEqual("a", match.Letters());
+            Assert.AreEqual("a", match);
             Assert.AreEqual(0, any.Increment);
             any.Match(seq, 1);
-            Assert.AreEqual("a", match.Letters());
+            Assert.AreEqual("a", match);
             Assert.AreEqual(0, any.Increment);
             any.Match(seq, 1);
-            Assert.AreEqual("ac", match.Letters());
+            Assert.AreEqual("ac", match);
             Assert.AreEqual(0, any.Increment);
             any.Match(seq, 1);
-            Assert.AreEqual("ac", match.Letters());
+            Assert.AreEqual("ac", match);
             Assert.AreEqual(0, any.Increment);
             any.Match(seq, 1);
-            Assert.AreEqual("act", match.Letters());
+            Assert.AreEqual("act", match);
             Assert.AreEqual(1, any.Increment);
             any.Match(seq, 1);
-            Assert.AreEqual("a", match.Letters());
+            Assert.AreEqual("a", match);
             Assert.AreEqual(0, any.Increment);
         }      
 

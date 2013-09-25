@@ -6,6 +6,8 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using DB = System.Diagnostics.Debug;
 using Bio;
 using QUT.Bio.BioPatML.Patterns;
+using QUT.Bio.BioPatML.Sequences;
+
 
 
 
@@ -42,9 +44,9 @@ namespace QUT.Bio.BioPatML.Tests
             Match match;
 
             Sequence seq = new Sequence(Alphabets.DNA, "atcg");
-            int start = 1, end = 3, strand = +1;
+            int start = 1, end = 3;
             double similarity = 0.5;
-            match = new Match(pattern, seq, start, end, strand, similarity);
+            match = new Match(pattern, seq, start, end, Strand.Forward, similarity);
 
             return match;
         }
@@ -61,26 +63,25 @@ namespace QUT.Bio.BioPatML.Tests
             int start = 1, end = 3, strand = +1;
             double similarity = 0.5;
 
-            match.Set(seq, start, end-start+1, strand, similarity);
+            match.Set(seq, start, end-start+1, Strand.Forward, similarity);
 
             Assert.AreEqual(start, match.Start);
             Assert.AreEqual(end, match.End);
             Assert.AreEqual(strand, match.Strand);
             Assert.AreEqual(similarity, match.Similarity);
-            Assert.AreEqual(seq.ToString(), match.Sequence.ToString());
+            Assert.AreEqual(seq.ToString(), match.BaseSequence.ToString());
         }
 
 
         [TestMethod]
         public void TestCopy()
         {
-            int forward = 1;
-            Match m = new Match(pattern, null, 3, 2, forward, 1);
-            Match sub1 = new Match(pattern, null, 4, 2, forward, 0.5);
+            Match m = new Match(pattern, null, 3, 2, Strand.Forward, 1);
+            Match sub1 = new Match(pattern, null, 4, 2, Strand.Forward, 0.5);
 
             sub1.Impact = 0.5;
 
-            Match sub2 = new Match(pattern, null, 5, 2, forward, 0.1);
+            Match sub2 = new Match(pattern, null, 5, 2, Strand.Forward, 0.1);
             sub2.Impact = 0.7;
 
             m.SubMatches.Add(sub1);
@@ -122,42 +123,42 @@ namespace QUT.Bio.BioPatML.Tests
         {
             Sequence seq = new Sequence(Alphabets.DNA, "atcg");
             Match m = new Match(null);
-            m.Set(seq, 3, 4, 1, 0.75);
-            //Assert.AreEqual(seq, m.Sequence);
+            m.Set(seq, 3, 4, Strand.Forward, 0.75);
+            Assert.AreEqual(seq, m.BaseSequence);
             Assert.AreEqual(3, m.Start);
-            Assert.AreEqual(4, m.Length);
-            //Assert.AreEqual(1, m.Strand);
+            Assert.AreEqual(4, m.Count);
+            Assert.AreEqual(1, m.Strand);
             Assert.AreEqual(0.75, m.Similarity, 1e-3);
-            //Assert.AreEqual(1, m.CalcMismatches());
-            //Assert.AreEqual(3, m.Matches);
+            Assert.AreEqual(1, m.CalcMismatches());
+            Assert.AreEqual(3, m.Matches);
         }
 
         [TestMethod]
         public void TestSetMatch()
         {
             Sequence seq = new Sequence(Alphabets.DNA, "atcg");
-            Match m1 = new Match(null);
+            //Match m1 = new Match(null);
             Match m2 = new Match(null);
 
-            m1.Set(seq, 3, 2, 1, 0.5);
+            Match m1 = new Match(seq, 3, 2, Strand.Forward, 0.5);
+            
             m2.Set(m1);
 
-            Assert.AreEqual(seq, m2.Sequence);
+            Assert.AreEqual(seq, m2.BaseSequence);
             Assert.AreEqual(3, m2.Start);
             Assert.AreEqual(4, m2.End);
-            Assert.AreEqual(2, m2.Length);
+            Assert.AreEqual(2, m2.Count);
             Assert.AreEqual(1, m2.Strand);
             Assert.AreEqual(0.5, m2.Similarity, 1e-3);
-            Assert.AreEqual("cg", m2.Letters());
+            Assert.AreEqual("cg", m2);
         }
 
         [TestMethod]
         public void TestCalcStartEnd()
         {
-            int forward = 1;
             Match m = new Match(null);
-            Match sub1 = new Match(pattern, null, 2, 2, forward, 0.0);
-            Match sub2 = new Match(pattern, null, 3, 2, forward, 0.0);
+            Match sub1 = new Match(pattern, null, 2, 2, Strand.Forward, 0.0);
+            Match sub2 = new Match(pattern, null, 3, 2, Strand.Forward, 0.0);
 
             m.SubMatches.Add(sub1);
             m.SubMatches.Add(sub2);
@@ -166,17 +167,16 @@ namespace QUT.Bio.BioPatML.Tests
            
             Assert.AreEqual(2, m.SubMatches.Count);
             Assert.AreEqual(2, m.Start);
-            Assert.AreEqual(3, m.Length);
+            Assert.AreEqual(3, m.Count);
             Assert.AreEqual(4, m.End);
         }
 
         [TestMethod]
         public void TestCalcLength()
         {
-            int forward = 1;
             Match m = new Match(null);
-            Match sub1 = new Match(pattern, null, 2, 2, forward, 0.0);
-            Match sub2 = new Match(pattern, null, 3, 4, forward, 0.0);
+            Match sub1 = new Match(pattern, null, 2, 2, Strand.Forward, 0.0);
+            Match sub2 = new Match(pattern, null, 3, 4, Strand.Forward, 0.0);
 
             m.SubMatches.Add(sub1);
             m.SubMatches.Add(sub2);
@@ -191,10 +191,9 @@ namespace QUT.Bio.BioPatML.Tests
         [TestMethod]
         public void TestCalcSimilarity()
         {
-            int forward = 1;
             Match m = new Match(null);
-            Match sub1 = new Match(pattern, null, 0, 0, forward, 1.0);
-            Match sub2 = new Match(pattern, null, 0, 0, forward, 0.5);
+            Match sub1 = new Match(pattern, null, 0, 0, Strand.Forward, 1.0);
+            Match sub2 = new Match(pattern, null, 0, 0, Strand.Forward, 0.5);
 
             m.SubMatches.Add(sub1);
             m.SubMatches.Add(sub2);
@@ -206,18 +205,19 @@ namespace QUT.Bio.BioPatML.Tests
         [TestMethod]
         public void TestToString()
         {
-            int forward = 1 , reverse = -1;
             Sequence seq = new Sequence(Alphabets.DNA, "actgactg");
-            Match m = new Match(pattern, null, 3, 2, forward, 1);
-            m.SetSequence(seq);
+            Match m = new Match(pattern, null, 3, 2, Strand.Forward, 1);
+            m.BaseSequence = seq;
+            //m.SetSequence(seq);
 
             Assert.AreEqual("{3, 2, 1, 1, tg}", m.ToString()); //change the expected result from usual 1.0 to 1
 
-            m.SubMatches.Add(new Match(pattern, null, 4, 2, reverse, 0.5));
-            m.SubMatches[0].SetSequence(seq);
-            m.SubMatches.Add(new Match(pattern, null, 5, 3, forward, 0.1));
-            m.SubMatches[1].SetSequence(seq);
-
+            m.SubMatches.Add(new Match(pattern, null, 4, 2, Strand.Forward, 0.5));
+            //m.SubMatches[0].SetSequence(seq);
+            m.SubMatches[0].BaseSequence = seq;
+            m.SubMatches.Add(new Match(pattern, null, 5, 3, Strand.Forward, 0.1));
+            //m.SubMatches[1].SetSequence(seq);
+            m.SubMatches[1].BaseSequence = seq;
             Assert.AreEqual("{3, 2, 1, 1, tg, {4, 2, -1, 0.5, tc}, {5, 3, 1, 0.1, act}}",
                  m.ToString()); //see original code for actual result, i trim away the 1 decimal placing to pass the
             //test as there wont be much impact

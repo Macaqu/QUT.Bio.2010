@@ -62,9 +62,17 @@ namespace QUT.Bio.BioPatML.Statistic
         {
             Add(sequence);
         }
+
+        
 #endregion
 
         #region -- Method : Add Component of our Histogram --
+
+
+        private void Add(ISequence sequence)
+        {
+            Add(sequence, sequence.Alphabet);
+        }
 
         /// <summary>
         ///  Adds all symbols contained in the given sequence to the histogram.

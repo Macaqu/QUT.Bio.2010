@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using QUT.Bio.BioPatML.Sequences.Annotations;
-using QUT.Bio.BioPatML.Sequences.List;
+//using QUT.Bio.BioPatML.Sequences.Annotations;
+//using QUT.Bio.BioPatML.Sequences.List;
 //using QUT.Bio.BioPatML.Symbols.Accessor;
 using QUT.Bio.BioPatML.Common.XML;
 using Bio;
@@ -259,12 +259,17 @@ namespace QUT.Bio.BioPatML.Sequences
 
         public IAlphabet Alphabet
         {
-            get { return this.BaseSequence.Alphabet; }
+            get { 
+                return this.BaseSequence.Alphabet; 
+            }
         }
+
 
         public long Count
         {
-            get { return this.BaseSequence.Count; }
+            get { 
+                return this.BaseSequence.Count; 
+            }
         }
 
         public ISequence GetComplementedSequence()
@@ -320,7 +325,9 @@ namespace QUT.Bio.BioPatML.Sequences
 
         public byte this[long index]
         {
-            get { return this.BaseSequence[index]; }
+            get { 
+                return this.BaseSequence[index]; 
+            }
         }
 
         public IEnumerator<byte> GetEnumerator()

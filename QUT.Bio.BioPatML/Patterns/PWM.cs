@@ -5,7 +5,6 @@ using System.Xml.Linq;
 using System.Text;
 using QUT.Bio.BioPatML.Common.Structures;
 using QUT.Bio.BioPatML.Common.XML;
-using QUT.Bio.BioPatML.Alphabets;
 using QUT.Bio.BioPatML.Sequences;
 using QUT.Bio.BioPatML.Sequences.List;
 using QUT.Bio.BioPatML.Symbols;
@@ -14,6 +13,7 @@ using System.Globalization;
 using QUT.Bio.BioPatML.Util;
 using Bio;
 using System.Collections;
+using QUT.Bio.BioPatML.Alphabet;
 
 /*****************| Queensland University Of Technology |********************
  *  Original Author          : Dr Stefan Maetschke 
@@ -269,7 +269,22 @@ namespace QUT.Bio.BioPatML.Patterns {
 			UpdateMinMaxScore();
 		}
 
-       
+
+        /// <summary>
+        /// Adds a weight vector (described as string) for the given symbol to the 
+        /// weight matrix.
+        /// </summary>
+        /// <param name="symbol">Symbol, e.g. Nucleotide or amino acid symbol. </param>
+        /// <param name="weights">
+        /// Weight vector as string. Valid delimiters are ";,: ".
+        /// All vectors added to the matrix must be of the same length otherwise an 
+        /// ArgumentOutOfRangeException will be thrown.
+        /// </param>
+        public void Add(char symbol, String weights)
+        {
+            Add(symbol, PrimitiveParse.StringToDoubleArray(weights));
+        }
+
 		
 
 
@@ -550,20 +565,12 @@ namespace QUT.Bio.BioPatML.Patterns {
 						throw new ArgumentException( "Invalid alphabet letter '" + letter + "'!" );
 					}
 
-					Add( letter, GetWeight(weights) );
+					Add( letter, weights);
 				}
 			}
 		}
 
 
-        private double[] GetWeight(string weightString) {
-            double[] doubleArray = new double[weightString.Length];
-            for (int i = 0; i < weightString.Length; i++) { 
-                doubleArray[i] = double.Parse(weightString[i]);
-            }
-
-                return null;
-        }
 
 		/// <summary> Express the contents of this PWM as a XElement.
 		/// </summary>

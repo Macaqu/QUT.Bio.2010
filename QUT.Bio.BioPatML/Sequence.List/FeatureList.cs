@@ -17,7 +17,7 @@ namespace QUT.Bio.BioPatML.Sequences.List {
 	///   A feature list is a list of features, typically attached to a sequence. 
 	///   A list of gene locations in a genome for example.
 	/// </summary>
-	public sealed class FeatureList : RegionList<Feature> {
+	public sealed class FeatureList : AnnotatedList<Feature> {
 		/** Reference to the sequence the feature list is attached to */
 		private ISequence sequence;
 

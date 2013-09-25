@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Bio;
 
 /***************************************************************************
  *  Original Author          : Dr Stefan Maetschke 
@@ -16,7 +17,7 @@ namespace QUT.Bio.BioPatML.Sequences.List
     ///  This class implements a list of {@link Region}s and serves as a base class
     ///  for other lists as {@link SequenceList} and {<see> FeatureList </see>}.
     /// </summary>
-    public class RegionList<T> : AnnotatedList<T> where T: Region
+    public class RegionList<T> : AnnotatedList<T> where T: ISequence
     {
         /// <summary>
         ///  Creates an empty region list.

@@ -6,10 +6,10 @@ using System.Xml;
 using System.Xml.Linq;
 
 using QUT.Bio.BioPatML.Symbols;
-using QUT.Bio.BioPatML.Alphabets;
 using QUT.Bio.BioPatML.Common.XML;
 using QUT.Bio.BioPatML.Sequences;
 using Bio;
+using QUT.Bio.BioPatML.Alphabet;
 
 /*****************| Queensland University Of Technology |********************
  *  Original Author          : Dr Stefan Maetschke 
@@ -31,7 +31,7 @@ namespace QUT.Bio.BioPatML.Patterns {
 
 		/// <summary> List of symbols in this motif element
 		/// </summary>
-        private List<String> motifSymbols = new List<String>();
+        private List<char> motifSymbols = new List<char>();
 
 		/// <summary> Internal constructor for deserialization.
 		/// </summary>
@@ -65,10 +65,10 @@ namespace QUT.Bio.BioPatML.Patterns {
 
 		public Motif (
 			IAlphabet alphabetType,
-			string motif,
+			char motif,
 			double threshold = 1.0
 		) 
-			: this ( null, alphabetType, motif, threshold )
+			: this ( null, alphabetType, motif.ToString(), threshold )
 		{
 		}
 
@@ -79,19 +79,20 @@ namespace QUT.Bio.BioPatML.Patterns {
 			get {
 				StringBuilder sb = new StringBuilder();
 
-				foreach ( String sym in motifSymbols ) {
-					if ( IsValidSymbol(sym)) { 
+				foreach ( char sym in motifSymbols ) {
+                    if (alphabet.GetValidSymbols().Contains((byte)sym))
+                    { 
 						sb.Append( "[" + sym + "]" );
 					}
 					else {
 						sb.Append( sym);
 					}
 				}
-               // IAlphabet alp = DnaAlphabet.Instance;
-				return sb.ToString();
+               return sb.ToString();
 			}
 		}
 
+        /*
         private bool IsValidSymbol(String symbol) {
             byte[] symbolByte = GetSymbolsByte(symbol);
             for (int i = 0; i < symbolByte.Length; i++)
@@ -103,10 +104,11 @@ namespace QUT.Bio.BioPatML.Patterns {
             }
             return true;
         }
-
+*/
         private byte[] GetSymbolsByte(String symbols) {
             return Encoding.Unicode.GetBytes(symbols); ;
         }
+
 
 		/// <summary> Implementation of the IMatcher interface. An any pattern matches any sequence.
 		/// <see cref="QUT.Bio.BioPatML.Patterns.IMatcher">IMatcher interface</see>.
@@ -153,7 +155,7 @@ namespace QUT.Bio.BioPatML.Patterns {
 
 		public static void Parse(
 			string sequence,
-			List<String> symbols,
+			List<char> symbols,
 			 IAlphabet alphabet
 		) {
 			
@@ -166,7 +168,7 @@ namespace QUT.Bio.BioPatML.Patterns {
 			symbols.Clear();
 			//SymbolMeta alternative = null;
 
-            List<String> alternative = null;
+            List<char> alternative = null;
             
             for ( int i = 0; i < sequence.Length; i++ ) {
 				char letter = sequence[i];
@@ -175,8 +177,8 @@ namespace QUT.Bio.BioPatML.Patterns {
 					if ( alternative != null ) {
 						throw new ArgumentException( "'[' within alternative is not permitted" );
 					}
-
-					alternative = new List<String>{ "#", "ALT", "Alternative" }; //letter, code, name
+                    //TODO: LB, How to define the bracket as a symbols in bio .net?
+                    //alternative = new SymbolMeta('#', "ALT", "Alternative");//letter, code, name
 				}
 
 				else {
@@ -185,18 +187,14 @@ namespace QUT.Bio.BioPatML.Patterns {
 							throw new ArgumentException( "Opening bracket for ']' is missing!" );
 						}
                         symbols.AddRange(alternative);
-                        //alternative.AddRange(symbols);
-						//symbols..Add( alternative );
-						alternative = null;
+                        alternative = null;
 					}
 
 					else if ( alternative != null ) {
-                        
-						alternative = new List<String>{letter.ToString(), name.Substring(0,3), name /*new Symbol(letter)*/ };
+                        alternative.Add(letter);
 					}
 					else {
-                        symbols.AddRange(new List<String> { letter.ToString(), name.Substring(0, 3), name /*new Symbol(letter)*/ });
-                        //symbols.Add(new Symbol(letter));
+                        symbols.Add(letter);
 					}
 				}
 
@@ -238,5 +236,6 @@ namespace QUT.Bio.BioPatML.Patterns {
 				new XAttribute( "motif", Letters )
 			);
 		}
-	}
+
+    }
 }
