@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-//using QUT.Bio.BioPatML.Sequences.Annotations;
+using QUT.Bio.BioPatML.Sequences.Annotations;
+using QUT.Bio.BioPatML.Sequences.List;
 //using QUT.Bio.BioPatML.Sequences.List;
 //using QUT.Bio.BioPatML.Symbols.Accessor;
 using QUT.Bio.BioPatML.Common.XML;
@@ -350,7 +351,8 @@ namespace QUT.Bio.BioPatML.Sequences
 
         public List<ISequenceRange> ParentSeqRanges
         {
-            get ;
+            get;
+            set;
         }
 
         public long Start
@@ -404,6 +406,140 @@ namespace QUT.Bio.BioPatML.Sequences
             Strand = Strand.Parse("Strand");
         }
 
-        
+
+
+        IAlphabet ISequence.Alphabet
+        {
+            get { throw new NotImplementedException(); }
+        }
+
+        long ISequence.Count
+        {
+            get { throw new NotImplementedException(); }
+        }
+
+        ISequence ISequence.GetComplementedSequence()
+        {
+            throw new NotImplementedException();
+        }
+
+        ISequence ISequence.GetReverseComplementedSequence()
+        {
+            throw new NotImplementedException();
+        }
+
+        ISequence ISequence.GetReversedSequence()
+        {
+            throw new NotImplementedException();
+        }
+
+        ISequence ISequence.GetSubSequence(long start, long length)
+        {
+            throw new NotImplementedException();
+        }
+
+        string ISequence.ID
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+            set
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        long ISequence.IndexOfNonGap(long startPos)
+        {
+            throw new NotImplementedException();
+        }
+
+        long ISequence.IndexOfNonGap()
+        {
+            throw new NotImplementedException();
+        }
+
+        long ISequence.LastIndexOfNonGap(long endPos)
+        {
+            throw new NotImplementedException();
+        }
+
+        long ISequence.LastIndexOfNonGap()
+        {
+            throw new NotImplementedException();
+        }
+
+        Dictionary<string, object> ISequence.Metadata
+        {
+            get { throw new NotImplementedException(); }
+        }
+
+        byte ISequence.this[long index]
+        {
+            get { throw new NotImplementedException(); }
+        }
+
+        IEnumerator<byte> IEnumerable<byte>.GetEnumerator()
+        {
+            throw new NotImplementedException();
+        }
+
+        long ISequenceRange.End
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+            set
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        string ISequenceRange.ID
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+            set
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        Dictionary<string, object> ISequenceRange.Metadata
+        {
+            get { throw new NotImplementedException(); }
+        }
+
+        List<ISequenceRange> ISequenceRange.ParentSeqRanges
+        {
+            get { throw new NotImplementedException(); }
+        }
+
+        long ISequenceRange.Start
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+            set
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        int IComparable.CompareTo(object obj)
+        {
+            throw new NotImplementedException();
+        }
+
+        int IComparable<ISequenceRange>.CompareTo(ISequenceRange other)
+        {
+            throw new NotImplementedException();
+        }
+
     }
 }

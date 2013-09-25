@@ -168,5 +168,20 @@ namespace QUT.Bio.BioPatML.Patterns {
 		public IEnumerable<XElement> ToXml() {
 			return list.Select( p => p.ToXml() );
 		}
-	}
+
+        public IEnumerator<IPattern> GetEnumerator()
+        {
+            throw new NotImplementedException();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            throw new NotImplementedException();
+        }
+
+        IEnumerator<IPattern> IEnumerable<IPattern>.GetEnumerator()
+        {
+            throw new NotImplementedException();
+        }
+    }
 }
