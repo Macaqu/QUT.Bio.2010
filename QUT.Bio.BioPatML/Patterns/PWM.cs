@@ -6,7 +6,7 @@ using System.Text;
 using QUT.Bio.BioPatML.Common.Structures;
 using QUT.Bio.BioPatML.Common.XML;
 using QUT.Bio.BioPatML.Sequences;
-using QUT.Bio.BioPatML.Sequences.List;
+//using QUT.Bio.BioPatML.Sequences.List;
 using QUT.Bio.BioPatML.Symbols;
 using QUT.Bio.BioPatML.Statistic;
 using System.Globalization;
@@ -14,6 +14,7 @@ using QUT.Bio.BioPatML.Util;
 using Bio;
 using System.Collections;
 using QUT.Bio.BioPatML.Alphabet;
+using QUT.Bio.BioPatML.Sequences.List;
 
 /*****************| Queensland University Of Technology |********************
  *  Original Author          : Dr Stefan Maetschke 
@@ -165,7 +166,7 @@ namespace QUT.Bio.BioPatML.Patterns {
 		    
         }
 
-		#endregion -- Public Constructors --
+		#endregion -- Public Constructors --s
 
 		#region -- Properties --
 
@@ -358,7 +359,7 @@ namespace QUT.Bio.BioPatML.Patterns {
 
 			foreach ( char sym in map.Keys ) {
 				for ( int i = 0; i < n; i++ ) {
-					if ( symbols[i] == null || Get( sym, col ) < Get( symbols[i], col ) ) {
+					if ( i > symbols.Length || Get( sym, col ) < Get( symbols[i], col ) ) {
 						for ( int j = n - 1; j > i; j-- )
 							symbols[j] = symbols[j - 1];
 
@@ -383,10 +384,10 @@ namespace QUT.Bio.BioPatML.Patterns {
 		private void UpdateConsensus ( char symbol, int index ) {
 			double weight = Get( symbol, index );
 
-			if ( consensus[index] == null || Get( consensus[index], index ) < weight )
+			if (  index > consensus.Length || Get( consensus[index], index ) < weight )
 				consensus[index] = symbol;
 
-			if ( antiConsensus[index] == null || Get( antiConsensus[index], index ) > weight )
+			if ( index > antiConsensus.Length || Get( antiConsensus[index], index ) > weight )
 				antiConsensus[index] = symbol;
 
 		}
@@ -489,7 +490,7 @@ namespace QUT.Bio.BioPatML.Patterns {
 		/// <returns></returns>
 
 		public double Estimate (
-			SequenceList sequenceList,
+			SequenceList<ISequence> sequenceList,
 			int startPosition,
 			HistogramSymbol background
 		) {

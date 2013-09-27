@@ -3,12 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using QUT.Bio.BioPatML.Sequences.Annotations;
-using QUT.Bio.BioPatML.Sequences.List;
-//using QUT.Bio.BioPatML.Sequences.List;
-//using QUT.Bio.BioPatML.Symbols.Accessor;
 using QUT.Bio.BioPatML.Common.XML;
 using Bio;
+using QUT.Bio.BioPatML.Util;
 using System.Xml.Linq;
+
 
 /*****************| Queensland  University Of Technology |*******************
  *  Original Author          : Dr Stefan Maetschke 
@@ -30,6 +29,11 @@ namespace QUT.Bio.BioPatML.Sequences
     /// </summary>
     public class Feature : ISequence, ISequenceRange
     {
+        private long start;
+        private long end;
+        private string id;
+        private ISequence sequence;
+        private Sequences.Strand strand;
 
         public Feature() { }
 
@@ -60,8 +64,6 @@ namespace QUT.Bio.BioPatML.Sequences
             ISequence baseSequence
         )
         {
-            //TODO: Worry about annotations later. They belomg in Metadata I think.
-            //if (name != null) base.Annotations.Add(new Annotation("Name", name));
             this.ID = name;
             Set(start, end, strand);
             this.BaseSequence = baseSequence;
@@ -231,7 +233,7 @@ namespace QUT.Bio.BioPatML.Sequences
 
             if ((int)(End - feature.End) * Strand > 0)
             {
-               dist = (int)(Strand == Strand.Forward ? BaseSequence.Count - End : Start - 1);
+               dist = (int)(Strand == Strand.Forward ? Count - End : Start - 1);
             }
 
             return dist;
@@ -261,7 +263,10 @@ namespace QUT.Bio.BioPatML.Sequences
         public IAlphabet Alphabet
         {
             get { 
-                return this.BaseSequence.Alphabet; 
+                if(BaseSequence != null){
+                    return this.BaseSequence.Alphabet;
+                }
+                return null;
             }
         }
 
@@ -269,70 +274,136 @@ namespace QUT.Bio.BioPatML.Sequences
         public long Count
         {
             get { 
-                return this.BaseSequence.Count; 
+                if(BaseSequence != null){
+                    long maxCount =  this.BaseSequence.Count;
+                    long count = End - Start + 1;
+                    if (maxCount > count)
+                    {
+                        return count;
+                    }
+                    else 
+                    {
+                        return maxCount;
+                    }
+                }
+                return 0;
             }
         }
 
         public ISequence GetComplementedSequence()
         {
-            return this.BaseSequence.GetComplementedSequence();
+            if(BaseSequence != null){
+                return this.BaseSequence.GetComplementedSequence();
+            }
+            return null;
         }
 
         public ISequence GetReverseComplementedSequence()
         {
-            return this.BaseSequence.GetReverseComplementedSequence();
+            if(BaseSequence != null){
+                return this.BaseSequence.GetReverseComplementedSequence();
+            }
+            return null;
         }
 
         public ISequence GetReversedSequence()
         {
-            return this.BaseSequence.GetReversedSequence();
+            if(BaseSequence != null){
+                return this.BaseSequence.GetReversedSequence();
+            }
+            return null;
         }
-
+            
         public ISequence GetSubSequence(long start, long length)
         {
-            return this.BaseSequence.GetSubSequence(start, length);
+            if(BaseSequence != null){
+                return this.BaseSequence.GetSubSequence(start, length);
+            }
+            return null;
         }
 
         public string ID
         {
-            get;
-            private set;
+            get { return id; }
+            set { id = value; }
         }
 
         public long IndexOfNonGap(long startPos)
         {
+            if (BaseSequence == null)
+            {
+                throw new ArgumentNullException("sequence object is not implemented yet");
+            }
+            
             return this.BaseSequence.IndexOfNonGap(startPos);
+           
         }
 
         public long IndexOfNonGap()
         {
+            if (BaseSequence == null)
+            {
+                throw new ArgumentNullException("sequence object is not implemented yet");
+            }
+            
             return this.BaseSequence.IndexOfNonGap();
+            
         }
 
         public long LastIndexOfNonGap(long endPos)
         {
+            if (BaseSequence == null)
+            {
+                throw new ArgumentNullException("sequence object is not implemented yet");
+            }
+            
             return this.BaseSequence.LastIndexOfNonGap(endPos);
+            
         }
 
         public long LastIndexOfNonGap()
         {
-            return this.BaseSequence.LastIndexOfNonGap();
+            if (BaseSequence == null)
+            {
+                throw new ArgumentNullException("sequence object is not implemented yet");
+            }
+            
+                return this.BaseSequence.LastIndexOfNonGap();
         }
+
+
 
         public Dictionary<string, object> Metadata
         {
-            get { return this.BaseSequence.Metadata; }
+            get {
+                if (BaseSequence == null)
+                {
+                    throw new ArgumentNullException("sequence object is not implemented yet");
+                }
+                
+                return this.BaseSequence.Metadata; 
+                
+            }
         }
 
         public byte this[long index]
         {
             get { 
-                return this.BaseSequence[index]; 
+                if(BaseSequence == null){
+                    throw new ArgumentNullException("sequence object is not implemented yet");
+                }
+
+                return this.BaseSequence[index];
             }
         }
 
         public IEnumerator<byte> GetEnumerator()
         {
+            if (BaseSequence == null)
+            {
+                throw new ArgumentNullException("sequence object is not implemented yet");
+            }
+
             for (int i = (int)Start; i <= (int)End; i++ ) {
                 yield return BaseSequence[(long)i];
             }
@@ -340,13 +411,30 @@ namespace QUT.Bio.BioPatML.Sequences
 
         System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
         {
+            if (BaseSequence == null)
+            {
+                throw new ArgumentNullException("sequence object is not implemented yet");
+            }
             return this.BaseSequence.GetEnumerator();
         }
 
         public long End
         {
-            get;
-            set;
+            get {
+                if (BaseSequence == null)
+                {
+                    throw new ArgumentNullException("sequence object is not implemented yet");
+                }
+
+                if (end <= BaseSequence.Count - 1)
+                    return end;
+                else
+                    return BaseSequence.Count - 1;
+            }
+            set
+            {
+                end = value;
+            }
         }
 
         public List<ISequenceRange> ParentSeqRanges
@@ -357,33 +445,43 @@ namespace QUT.Bio.BioPatML.Sequences
 
         public long Start
         {
-            get;
-            set;
+            get { return start; }
+            set
+            {
+                start = value;
+            }
         }
 
-        public int CompareTo(object obj)
-        {
-            throw new NotImplementedException();
-        }
 
-        public int CompareTo(ISequenceRange other)
-        {
-            throw new NotImplementedException();
-        }
+
+        
 
         public ISequence BaseSequence
         {
-            get;
-            set;
+            get {
+                if (sequence != null)
+                {
+                    return sequence;
+                }
+
+                return null;
+            }
+            set {
+                sequence = value;
+            }
         }
 
         public Strand Strand
         {
-            get;
-            set;
+            get {
+                return strand;
+            }
+            set {
+                strand = value;
+            }
         }
 
-        public XElement ToXml()
+        public virtual XElement ToXml()
         {
             return new XElement("Region",
                 new XAttribute("Start", this.Start),
@@ -407,139 +505,51 @@ namespace QUT.Bio.BioPatML.Sequences
         }
 
 
-
-        IAlphabet ISequence.Alphabet
+        
+        public int CompareTo(object obj)
         {
-            get { throw new NotImplementedException(); }
+            if (obj == null)
+                return 0;
+
+            SequenceRange sequenceRange = obj as SequenceRange;
+            if (obj == null)
+                return 0;
+
+            return CompareTo(sequenceRange);
         }
+        
 
-        long ISequence.Count
+        public int CompareTo(ISequenceRange other)
         {
-            get { throw new NotImplementedException(); }
-        }
-
-        ISequence ISequence.GetComplementedSequence()
-        {
-            throw new NotImplementedException();
-        }
-
-        ISequence ISequence.GetReverseComplementedSequence()
-        {
-            throw new NotImplementedException();
-        }
-
-        ISequence ISequence.GetReversedSequence()
-        {
-            throw new NotImplementedException();
-        }
-
-        ISequence ISequence.GetSubSequence(long start, long length)
-        {
-            throw new NotImplementedException();
-        }
-
-        string ISequence.ID
-        {
-            get
+            if (other == null)
             {
-                throw new NotImplementedException();
+                return -1;
             }
-            set
+
+            int compare = Start.CompareTo(other.Start);
+
+            if (compare == 0)
+                compare = End.CompareTo(other.End);
+
+            if (compare == 0)
+                compare = string.Compare(ID, other.ID, StringComparison.OrdinalIgnoreCase);
+
+            if (compare == 0)
             {
-                throw new NotImplementedException();
+                compare = ParentSeqRanges.Count.CompareTo(other.ParentSeqRanges.Count);
+
+                if (compare == 0)
+                {
+                    for (int index = 0; index < ParentSeqRanges.Count; index++)
+                    {
+                        compare = ParentSeqRanges[index].CompareTo(other.ParentSeqRanges[index]);
+                        if (compare != 0)
+                            break;
+                    }
+                }
             }
-        }
 
-        long ISequence.IndexOfNonGap(long startPos)
-        {
-            throw new NotImplementedException();
+            return compare;
         }
-
-        long ISequence.IndexOfNonGap()
-        {
-            throw new NotImplementedException();
-        }
-
-        long ISequence.LastIndexOfNonGap(long endPos)
-        {
-            throw new NotImplementedException();
-        }
-
-        long ISequence.LastIndexOfNonGap()
-        {
-            throw new NotImplementedException();
-        }
-
-        Dictionary<string, object> ISequence.Metadata
-        {
-            get { throw new NotImplementedException(); }
-        }
-
-        byte ISequence.this[long index]
-        {
-            get { throw new NotImplementedException(); }
-        }
-
-        IEnumerator<byte> IEnumerable<byte>.GetEnumerator()
-        {
-            throw new NotImplementedException();
-        }
-
-        long ISequenceRange.End
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-            set
-            {
-                throw new NotImplementedException();
-            }
-        }
-
-        string ISequenceRange.ID
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-            set
-            {
-                throw new NotImplementedException();
-            }
-        }
-
-        Dictionary<string, object> ISequenceRange.Metadata
-        {
-            get { throw new NotImplementedException(); }
-        }
-
-        List<ISequenceRange> ISequenceRange.ParentSeqRanges
-        {
-            get { throw new NotImplementedException(); }
-        }
-
-        long ISequenceRange.Start
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-            set
-            {
-                throw new NotImplementedException();
-            }
-        }
-
-        int IComparable.CompareTo(object obj)
-        {
-            throw new NotImplementedException();
-        }
-
-        int IComparable<ISequenceRange>.CompareTo(ISequenceRange other)
-        {
-            throw new NotImplementedException();
-        }
-
     }
 }

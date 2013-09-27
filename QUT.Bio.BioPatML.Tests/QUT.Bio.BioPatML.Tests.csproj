@@ -69,12 +69,12 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
-    <Content Include="Resources\BioPatMLXML\Any.xml" />
+    <Resource Include="Resources\BioPatMLXML\Any.xml" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\BioPaperTestData\RegionalPattern\BioPatML.xsd">
+    <Resource Include="Resources\BioPaperTestData\RegionalPattern\BioPatML.xsd">
       <SubType>Designer</SubType>
-    </None>
+    </Resource>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

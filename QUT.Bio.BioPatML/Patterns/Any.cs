@@ -58,7 +58,8 @@ namespace QUT.Bio.BioPatML.Patterns {
 			ISequence sequence, 
 			int position 
 		) {
-			return new Match( sequence, position, NextLength(), Strand.Forward, 1.0 );
+            LatestMatch.Set( sequence, position, NextLength(), Strand.Forward, 1.0 );
+            return LatestMatch;
 		}
 
 		/// <summary>

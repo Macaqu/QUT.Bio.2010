@@ -82,23 +82,23 @@ namespace TestBioPatML.TestPatterns
             match = composition.Match(seq, 1);
             Assert.AreEqual(1, (int)match.Count);
             Assert.AreEqual(0, composition.Increment);
-            Assert.AreEqual("a", match);
+            Assert.AreEqual("a", match.BaseSequence.ToString());
             match = composition.Match(seq, 1);
             Assert.AreEqual(3, match.Count);
             Assert.AreEqual(0, composition.Increment);
-            Assert.AreEqual("act", match);
+            Assert.AreEqual("act", match.BaseSequence.ToString());
             match = composition.Match(seq, 1);
             Assert.AreEqual(4, match.Count);
             Assert.AreEqual(0, composition.Increment);
-            Assert.AreEqual("actg", match);
+            Assert.AreEqual("actg", match.BaseSequence.ToString());
             match = composition.Match(seq, 1);
             Assert.AreEqual(6, match.Count);
             Assert.AreEqual(0, composition.Increment);
-            Assert.AreEqual("actgac", match);
+            Assert.AreEqual("actgac", match.BaseSequence.ToString());
             match = composition.Match(seq, 1);
             Assert.AreEqual(7, match.Count);
             Assert.AreEqual(1, composition.Increment);
-            Assert.AreEqual("actgact", match);
+            Assert.AreEqual("actgact", match.BaseSequence.ToString());
         }
 
 
@@ -114,19 +114,19 @@ namespace TestBioPatML.TestPatterns
             Assert.AreEqual(2, match.Count);
             Assert.AreEqual(1, match.Start);
             Assert.AreEqual(2, match.End);
-            Assert.AreEqual("ac", match.BaseSequence);
+            Assert.AreEqual("ac", match.BaseSequence.ToString());
             Assert.AreEqual(0.5, match.Similarity, 1e-2);
 
             match = match.SearchBest(0, 0, composition);
             Assert.AreEqual(2, match.Start);
-            Assert.AreEqual("ct", match.BaseSequence);
+            Assert.AreEqual("ct", match.BaseSequence.ToString());
             Assert.AreEqual(0.83, match.Similarity, 1e-2);
 
             var matches = match.Search(0, 0, composition);
             Assert.AreEqual(3, matches.Count);
-            Assert.AreEqual("ac", match.BaseSequence);
-            Assert.AreEqual("act", match.BaseSequence);
-            Assert.AreEqual("ct", match.BaseSequence);
+            Assert.AreEqual("ac", match.BaseSequence.ToString());
+            Assert.AreEqual("act", match.BaseSequence.ToString());
+            Assert.AreEqual("ct", match.BaseSequence.ToString());
         }
 
 
@@ -144,7 +144,7 @@ namespace TestBioPatML.TestPatterns
             Match match = composition.Match(seq, 1);
             Assert.AreEqual(1, match.Start);
             Assert.AreEqual(8, match.End);
-            //Assert.AreEqual("actcctct", match.Letters());
+            Assert.AreEqual("actcctct", match.Letters());
             Assert.AreEqual(0.75, match.Similarity, 1e-2);
 
             Match newMatch = match.SearchBest(0, 0, composition);

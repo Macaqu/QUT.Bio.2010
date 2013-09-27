@@ -14,7 +14,8 @@ using Bio;
  ***************************************************************************/
 namespace QUT.Bio.BioPatML.Sequences.List {
 	/// <summary> This class describes a list of sequences. </summary>
-	public class SequenceList : AnnotatedList<ISequence> {
+	public class SequenceList<T> : List<T> where T : ISequence {
+        private string name;
 
 		/// <summary> Creates an empty sequence list. </summary>
 
@@ -27,7 +28,9 @@ namespace QUT.Bio.BioPatML.Sequences.List {
 		/// <param name="name"></param>
 
 		public SequenceList ( String name )
-			: base( name ) { /* No implementation */ }
+        {
+            this.name = name;
+        }
 
 
 
@@ -40,5 +43,6 @@ namespace QUT.Bio.BioPatML.Sequences.List {
         {
             return this.Max( sequence => (int)sequence.Count);
         }
+
     }
 }

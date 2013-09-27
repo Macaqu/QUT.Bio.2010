@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using QUT.Bio.BioPatML.Sequences.Annotations;
+using Bio;
 
 /***************************************************************************
  *  Original Author          : Dr Stefan Maetschke 
@@ -18,7 +19,8 @@ namespace QUT.Bio.BioPatML.Sequences.List {
 	/// 
 	/// It appears to be a list of objects, which is itself associated with a list of annotations.
 	/// </summary>
-	public class AnnotatedList<T> : List<T>, IAnnotated where T : IAnnotated {
+    public class AnnotatedList<T> : List<T>, IAnnotated where T : IAnnotated
+    {
 		/// <summary>
 		/// List of annotations 
 		/// </summary>

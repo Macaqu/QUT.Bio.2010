@@ -103,15 +103,13 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Sequence.Annotations\Annotation.cs" />
     <Compile Include="Sequence.Annotations\AnnotationList.cs" />
-    <Compile Include="Sequence.List\AnnotatedList.cs" />
-    <Compile Include="Sequence.List\FeatureList.cs" />
-    <Compile Include="Sequence.List\IAnnotated.cs" />
     <Compile Include="Sequence.List\SequenceList.cs" />
     <Compile Include="Sequence\Feature.cs" />
     <Compile Include="Sequence\Strand.cs" />
     <Compile Include="Statistic\HistogramSymbol.cs" />
     <Compile Include="Symbols\Symbol.cs" />
     <Compile Include="Symbols\SymbolMeta.cs" />
+    <Compile Include="Util\Errors.cs" />
     <Compile Include="Util\UtilHelper.cs" />
   </ItemGroup>
   <ItemGroup />

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using QUT.Bio.BioPatML.Sequences;
-using QUT.Bio.BioPatML.Sequences.List;
+//using QUT.Bio.BioPatML.Sequences.List;
 using System.Xml.Linq;
 using QUT.Bio.BioPatML.Common.XML;
 using Bio;
@@ -31,14 +31,7 @@ namespace QUT.Bio.BioPatML.Patterns
         private readonly List<Match> subMatches = new List<Match>();
         private double similarity;
         private double impact = 1.0;
-        private Motif motif;
-        private ISequence sequence;
-        private int p;
-        private long p_2;
-        private int p_3;
-        private int position;
-        private int bestLen;
-
+        
         /** <summary> The similarity of the match within the interval [0,1] 1.0 means perfect/maximum match.  </summary> */
 
         public Double Similarity
@@ -91,12 +84,14 @@ namespace QUT.Bio.BioPatML.Patterns
             Set(sequence, start, length, strand, similarity);
         }
 
-        public Match(ISequence sequence, int position, int bestLen, Sequences.Strand strand, double similarity)
+        public Match(ISequence sequence, int start, int length, Sequences.Strand strand, double similarity)
+            : base()
         {
             // TODO: Complete member initialization
-            this.sequence = sequence;
-            this.position = position;
-            this.bestLen = bestLen;
+                
+            this.BaseSequence = sequence;
+            this.Start = start - 1;
+            this.End = (long)(length + Start - 1);
             this.Strand = strand;
             this.similarity = similarity;
         }
@@ -292,7 +287,7 @@ namespace QUT.Bio.BioPatML.Patterns
         {
             return subMatches.Count > 0
                 ? subMatches.Sum(match => match.CalcLength())
-                : (int)this.BaseSequence.Count;
+                : (int)this.Count;
         }
 
         /// <summary> Creates a string representation.
@@ -303,7 +298,7 @@ namespace QUT.Bio.BioPatML.Patterns
         {
             StringBuilder sb = new StringBuilder();
 
-            sb.Append("{" + Start + ", " + this.BaseSequence.Count + ", " + Strand + ", " +
+            sb.Append("{" + Start + ", " + this.Count + ", " + Strand + ", " +
                         (int)(Similarity * 100) / 100.0 + ", " + Letters());
 
             foreach (var subMatch in subMatches)
@@ -316,19 +311,19 @@ namespace QUT.Bio.BioPatML.Patterns
             return (sb.ToString());
         }
 
-        private string Letters()
+        public string Letters()
         {
             if (this.BaseSequence != null)
             {
-                int newStart = (int)this.Start - 1;
-                int newLength = (int)this.End - newStart;
-                ISequence subSequence = this.BaseSequence.GetSubSequence(newStart, newLength);
+                ISequence subSequence = this.BaseSequence.GetSubSequence(this.Start, this.End - this.Start + 1);
+                if (Strand == QUT.Bio.BioPatML.Sequences.Strand.Reverse)
+                {
+                    return subSequence.GetReverseComplementedSequence().ToString().ToLower();
+                }
                 return subSequence.ToString();
             }
-            else
-            {
-                return null;
-            }
+            
+            return null;
         }
 
         /// <summary> Return a new copy of this Match

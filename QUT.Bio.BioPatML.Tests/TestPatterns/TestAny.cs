@@ -42,21 +42,21 @@ namespace TestBioPatML.TestPatterns
         {
             Any any = new Any("", 1, 3, 1);
             ISequence seq = new Sequence(Alphabets.DNA, "actg");
-            Match match = any.Match(seq, 2);
+            Match match = any.Match(seq, 1);
 
-            Assert.AreEqual("c", match);
+            Assert.AreEqual("c", match.Letters());
             Assert.AreEqual(0, any.Increment);
 
-            any.Match(seq, 2);
-            Assert.AreEqual("ct", match);
+            any.Match(seq, 1);
+            Assert.AreEqual("ct", match.Letters());
             Assert.AreEqual(0, any.Increment);
 
-            any.Match(seq, 2);
-            Assert.AreEqual("ctg", match);
+            any.Match(seq, 1);
+            Assert.AreEqual("ctg", match.Letters());
             Assert.AreEqual(1, any.Increment);
 
-            any.Match(seq, 2);
-            Assert.AreEqual("c", match);
+            any.Match(seq, 1);
+            Assert.AreEqual("c", match.Letters());
             Assert.AreEqual(0, any.Increment);
 
         }
@@ -67,17 +67,17 @@ namespace TestBioPatML.TestPatterns
         {
             Any any = new Any("Any", 1, 4, 2.0);
             Sequence seq = new Sequence(Alphabets.DNA, "actg");
-            Match match = any.Match(seq, 1);
-            Assert.AreEqual("a", match);
+            Match match = any.Match(seq, 0);
+            Assert.AreEqual("a", match.Letters());
             Assert.AreEqual(0, any.Increment);
-            any.Match(seq, 1);
-            Assert.AreEqual("act", match);
+            any.Match(seq, 0);
+            Assert.AreEqual("act", match.Letters());
             Assert.AreEqual(0, any.Increment);
-            any.Match(seq, 1);
-            Assert.AreEqual("actg", match);
+            any.Match(seq, 0);
+            Assert.AreEqual("actg", match.Letters());
             Assert.AreEqual(1, any.Increment);
-            any.Match(seq, 1);
-            Assert.AreEqual("a", match);
+            any.Match(seq, 0);
+            Assert.AreEqual("a", match.Letters());
             Assert.AreEqual(0, any.Increment);
         }
 
@@ -87,23 +87,23 @@ namespace TestBioPatML.TestPatterns
         {
             Any any = new Any("Any", 1, 3, 0.4);
             Sequence seq = new Sequence(Alphabets.DNA, "actg");
-            Match match = any.Match(seq, 1);
-            Assert.AreEqual("a", match);
+            Match match = any.Match(seq, 0);
+            Assert.AreEqual("a", match.Letters());
             Assert.AreEqual(0, any.Increment);
-            any.Match(seq, 1);
-            Assert.AreEqual("a", match);
+            any.Match(seq, 0);
+            Assert.AreEqual("a", match.Letters());
             Assert.AreEqual(0, any.Increment);
-            any.Match(seq, 1);
-            Assert.AreEqual("ac", match);
+            any.Match(seq, 0);
+            Assert.AreEqual("ac", match.Letters());
             Assert.AreEqual(0, any.Increment);
-            any.Match(seq, 1);
-            Assert.AreEqual("ac", match);
+            any.Match(seq, 0);
+            Assert.AreEqual("ac", match.Letters());
             Assert.AreEqual(0, any.Increment);
-            any.Match(seq, 1);
-            Assert.AreEqual("act", match);
+            any.Match(seq, 0);
+            Assert.AreEqual("act", match.Letters());
             Assert.AreEqual(1, any.Increment);
-            any.Match(seq, 1);
-            Assert.AreEqual("a", match);
+            any.Match(seq, 0);
+            Assert.AreEqual("a", match.Letters());
             Assert.AreEqual(0, any.Increment);
         }      
 
@@ -111,7 +111,7 @@ namespace TestBioPatML.TestPatterns
         [TestMethod]
         public void TestRead()
         {
-            Definition definition = DefinitionIO.Read( Global.GetResourceReader( "BioPatML/Any.xml" ) );
+            Definition definition = DefinitionIO.Read( Global.GetResourceReader( "BioPatMLXML/Any.xml" ) );
             Any pattern = (Any)definition.Pattern;
 
             Assert.AreEqual("Any", definition.Name);
@@ -127,18 +127,18 @@ namespace TestBioPatML.TestPatterns
         public void TestToXml()
         {
             Definition definition = DefinitionIO.Read( Global.GetResourceReader( "BioPatMLXML/Any.xml" ) );
-            //Definition def2 = DefinitionIO.Read( DefinitionIO.Write( definition ) );
+            Definition def2 = DefinitionIO.Read( DefinitionIO.Write( definition ) );
 
-			//Any pattern = (Any) def2.Pattern;
+			Any pattern = (Any) def2.Pattern;
 
-            //Assert.AreEqual("Any", definition.Name);
-            //Assert.AreEqual("any", pattern.Name);
-            //Assert.AreEqual(6, pattern.MinLength);
-            //Assert.AreEqual(8, pattern.MaxLength);
-            //Assert.AreEqual(1.1, pattern.IncLength);
-            //Assert.AreEqual(0.9, pattern.Impact);
+            Assert.AreEqual("Any", definition.Name);
+            Assert.AreEqual("any", pattern.Name);
+            Assert.AreEqual(6, pattern.MinLength);
+            Assert.AreEqual(8, pattern.MaxLength);
+            Assert.AreEqual(1.1, pattern.IncLength);
+            Assert.AreEqual(0.9, pattern.Impact);
 
-			//Assert.IsTrue( definition.ToXml().ToString().IndexOf( "name=\"auto-" ) < 0 );
+			Assert.IsTrue( definition.ToXml().ToString().IndexOf( "name=\"auto-" ) < 0 );
 		}
     }
 }

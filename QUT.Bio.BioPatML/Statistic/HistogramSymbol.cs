@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using QUT.Bio.BioPatML.Symbols;
-using QUT.Bio.BioPatML.Sequences.List;
+//using QUT.Bio.BioPatML.Sequences.List;
 using QUT.Bio.BioPatML.Sequences;
 using Bio;
 
@@ -45,14 +45,6 @@ namespace QUT.Bio.BioPatML.Statistic
         /// </summary>
         public HistogramSymbol() { }
 
-        /// <summary>
-        ///  Constructs a histogram based on the provided list of sequencs.
-        /// </summary>
-        /// <param name="sequenceList"> List of sequences. </param>
-        public HistogramSymbol(SequenceList sequenceList)
-        {
-            Add(sequenceList);
-        }
 
         /// <summary>
         ///  Constructs a histogram based on the provided sequence.
@@ -82,16 +74,6 @@ namespace QUT.Bio.BioPatML.Statistic
         {
             for (int pos = 1; pos <= sequence.Count; pos++)
                 Add((char)sequence[pos], alphabet);
-        }
-
-        /// <summary>
-        ///  Constructs a histogram based on the provided list of sequencs.
-        /// </summary>
-        /// <param name="sequenceList"> List of sequences. </param>
-        public void Add(SequenceList sequenceList)
-        {
-            for (int i = 0; i < sequenceList.Count; i++)
-                Add(sequenceList[i]);
         }
 
         /// <summary>

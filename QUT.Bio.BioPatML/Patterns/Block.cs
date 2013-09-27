@@ -26,7 +26,8 @@ namespace QUT.Bio.BioPatML.Patterns {
 	/// and it is directly derived from the PWM class.
 	/// </summary>
 	public class Block : PWM {
-		private readonly SequenceList sequenceList = new SequenceList();
+        private readonly SequenceList<ISequence> sequenceList = new SequenceList<ISequence>();
+
 
 		/// <summary> Parameterless constructor for deserialization.
 		/// </summary>
@@ -43,12 +44,13 @@ namespace QUT.Bio.BioPatML.Patterns {
 		/// <param name="threshold"> Similarity threshold. </param>
 		public Block (
 			String name,
-			SequenceList sequenceList,
+			SequenceList<ISequence> sequenceList,
 			HistogramSymbol background,
 			double threshold
 		)
-			: base( name, sequenceList[0].Alphabet, threshold ) {
-			this.sequenceList.AddRange(sequenceList);
+			: base( name, sequenceList.ElementAt(0).Alphabet, threshold ) {
+			
+            this.sequenceList.AddRange(sequenceList);
 			Estimate( background );
 		}
 

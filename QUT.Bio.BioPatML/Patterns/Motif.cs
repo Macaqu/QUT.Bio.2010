@@ -132,7 +132,8 @@ namespace QUT.Bio.BioPatML.Patterns {
 					}
 				}
 			}
-            return new Match(this, sequence, 1, (int)sequence.Count, Strand.Forward, 1);
+            LatestMatch.Set(sequence, 1, (int)sequence.Count, Strand.Forward, (double)(length - mismatches) / length);
+            return LatestMatch;
 		}
 
 		/// <summary> Parses the motif description and generates a symbol array that describes
