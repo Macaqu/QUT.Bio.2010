@@ -132,7 +132,7 @@ namespace QUT.Bio.BioPatML.Patterns {
 					}
 				}
 			}
-            LatestMatch.Set(sequence, position, (int)sequence.Count, Strand.Forward, (double)(length - mismatches) / length);
+            LatestMatch.Set(sequence, 1, (int)sequence.Count, Strand.Forward, (double)(length - mismatches) / length);
             return LatestMatch;
 		}
 
